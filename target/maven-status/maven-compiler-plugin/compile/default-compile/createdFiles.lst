@@ -1,0 +1,11 @@
+serveletsController\ServletLogin.class
+filter\FilterAutentic.class
+serveletsController\ServletUsuarioController.class
+serveletsController\ServeletCadastro.class
+connection\testeCodigo.class
+dao\DAOcadastro.class
+dao\DAOLoginRepository.class
+model\ModelLogin.class
+dao\DAOUsuaryRepository.class
+model\ModelCadastro.class
+connection\SingleConnectionBanco.class

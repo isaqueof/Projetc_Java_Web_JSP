@@ -1,7 +1,0 @@
-serveletsController\ServletLogin.class
-filter\FilterAutentic.class
-serveletsController\ServletUsuarioController.class
-dao\DAOLoginRepository.class
-model\ModelLogin.class
-dao\DAOUsuaryRepository.class
-connection\SingleConnectionBanco.class
