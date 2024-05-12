@@ -1,0 +1,17 @@
+charColor=231,221,108
+commentColor=117,113,94
+conColor=86,216,240
+cppColor=255,255,255
+docColor=118,114,94
+eclipse.preferences.version=1
+functionColor=248,248,242
+keywordColor=241,41,113
+literateCommentColor=117,113,94
+overriddenByCSS=,conColor,thColor,sourceHoverBackgroundColor,symbolColor,keywordColor,literateCommentColor,varSymColor,varColor,functionColor,cppColor,docColor,charColor,commentColor,pragmaColor,stringColor,
+pragmaColor=117,113,94
+sourceHoverBackgroundColor=0,0,0
+stringColor=231,221,108
+symbolColor=216,216,216
+thColor=255,255,255
+varColor=248,248,242
+varSymColor=216,216,216

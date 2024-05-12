@@ -1,0 +1,22 @@
+
+o
+java:S1948"4Make "daoLoginRepository" transient or serializable.8าคค้1b fa1d214c2198aebbede9f3a83fcf3ad1h
+u
+java:S1161(":Add the "@Override" annotation above this method signature8าคค้1b afaa9e78302a844691c224dc41a65519h
+
+java:S17641"KCorrect one of the identical sub-expressions on both sides of operator "&&"8าคค้1b fcfab67938c7c69daf3a27594bc33d4bh
+r
+java:S25891"7Remove this expression which always evaluates to "true"8าคค้1b 068a994f516d645595b577aaf0898b12h
+	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.b 0ae7b8c844375b3a26be1ec60e44e722h
+“
+java:S2226"XRemove this misleading mutable servlet instance field or make it "static" and/or "final"8าคค้1b fa1d214c2198aebbede9f3a83fcf3ad1h
+
+java:S1989#"`Handle the following exceptions that could be thrown by "doPost": ServletException, IOException.8าคค้1b afaa9e78302a844691c224dc41a65519h
+
+java:S1989!"aHandle the following exceptions that could be thrown by "forward": ServletException, IOException.8าคค้1b 965dbaac085fc891bfbbd4f9d145bbc8h
+u
+java:S1161":Add the "@Override" annotation above this method signature8าคค้1b e194e70fa88fb46dba684dafa1710d2ah
+
+java:S1989U"aHandle the following exceptions that could be thrown by "forward": ServletException, IOException.8าคค้1b 965dbaac085fc891bfbbd4f9d145bbc8h
+ผ
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.8าคค้1b e0978b005e0e45c1d96e4c1c82b70a17h

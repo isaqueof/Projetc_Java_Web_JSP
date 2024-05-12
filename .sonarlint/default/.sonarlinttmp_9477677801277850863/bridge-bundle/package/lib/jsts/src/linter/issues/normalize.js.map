@@ -1,0 +1,1 @@
+{"version":3,"file":"normalize.js","sourceRoot":"","sources":["../../../../../packages/jsts/src/linter/issues/normalize.ts"],"names":[],"mappings":";;;AAqBA;;;;;;;;GAQG;AACH,SAAgB,iBAAiB,CAAC,KAAY;IAC5C,KAAK,CAAC,MAAM,IAAI,CAAC,CAAC;IAClB,IAAI,KAAK,CAAC,SAAS,EAAE,CAAC;QACpB,KAAK,CAAC,SAAS,IAAI,CAAC,CAAC;IACvB,CAAC;IACD,OAAO,KAAK,CAAC;AACf,CAAC;AAND,8CAMC"}

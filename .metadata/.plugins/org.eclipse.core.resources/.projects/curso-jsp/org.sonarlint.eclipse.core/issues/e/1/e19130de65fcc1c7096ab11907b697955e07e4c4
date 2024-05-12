@@ -1,0 +1,5 @@
+
+€	java:S101"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.b 88f8f6809b9e8c757d619bffe8d18ea3h
+v	java:S125"<This block of commented-out lines of code should be removed.8–ØßÍï1b 06a032fbffa94952e33a1e9e3b62c994h
+§
+java:S1130"lRemove the declaration of thrown exception 'java.lang.Exception', as it cannot be thrown from method's body.8­‰½Åô1b b0d4998a26f5b5742ad38c4af8817e32h
