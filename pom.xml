@@ -2,12 +2,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>curso-jsp</groupId>
-	<artifactId>curso-jsp</artifactId>
+	<groupId>project_Java_Web_Jsp</groupId>
+	<artifactId>project_Java_Web_Jsp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>curso-jsp</name>
-	<description>curso jsp dev</description>
+	<name>project_Java_Web_Jsp</name>
+	<description>project Java Web Jsp</description>
 
 
 	<dependencies>

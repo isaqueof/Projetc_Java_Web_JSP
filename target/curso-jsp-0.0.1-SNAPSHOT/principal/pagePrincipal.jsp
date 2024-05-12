@@ -61,8 +61,8 @@
 			<input type="hidden" name="acao" id="acao" value="">
 			<div class="container my-4">
 				<div class="row">
-					<div class="divTable" id="resultadoMsg"
-						class="col-sm-12 col-md-12 col-lg-12 col-xl-12 table-responsive table-content">
+					<div id="resultadoMsg"
+						class="table-responsive divTable col-sm-12 col-md-12 col-lg-12 col-xl-12 table-content">
 						<table id="tabelaresultados"
 							class="table table-striped table-sm align-middle table-borded table-dark table-striped table-hover">
 							<thead>
@@ -104,8 +104,8 @@
 				</div>
 				<div class="modal-body">
 
-					<form class="form-material" action="ServeletCadastro" method="post"
-						id="formUser">
+					<form class="form-material row g-3" action="ServeletCadastro"
+						method="post" id="formUser">
 						<input type="hidden" name="acao" id="acao" value="salvaAjax">
 
 
@@ -163,8 +163,8 @@
 						<div class="col-12 modal-footer">
 							<button type="button" class="btn btn-secondary"
 								data-bs-dismiss="modal">Fechar</button>
-							<button type="button" onclick="gravarCad()"
-								class="btn btn-primary">Salvar</button>
+							<button type="button" onclick="gravarCadastro()"
+								class="btn btn-primary" id="salvarBtn">Salvar</button>
 						</div>
 
 
@@ -174,11 +174,12 @@
 		</div>
 	</div>
 
-	
 
 
+
+
+	<script type="text/javascript" src="webjars/jquery/3.7.1/jquery.min.js"></script>
 	<!-- JavaScript (Table) -->
-
 	<script defer
 		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 	<script defer src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
@@ -204,23 +205,13 @@
 		src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
 	<script defer
 		src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.dataTables.js"></script>
-	<script defer src=""></script>
-	<script defer src=""></script>
-	<script defer src=""></script>
-
-
-
-
-	<!-- JavaScript (Opcional) -->
-	<script type="text/javascript" src="webjars/jquery/3.7.1/jquery.min.js"></script>
 
 	<!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->
 	<script src="webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 		crossorigin="anonymous"></script>
+	<script type="text/javascript" src="javaScript/cadastroJavaScript.js"></script>
 
-	<script type="text/javascript"
-		src="javaScript/scriptPrincipalCadastro.js"></script>
 	<script type="text/javascript">
 		const input = document.getElementById("nomeBusca");
 		input.addEventListener("keyup", function(event) {
@@ -229,10 +220,6 @@
 				document.getElementById("bottonClick").click();
 			}
 		});
-	</script>
-
-	<script type="text/javascript">
-		
 	</script>
 
 </body>

@@ -1,6 +1,13 @@
 @charset "UTF-8";
 
 body {
+
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	/* Definir altura total */
+	overflow: hidden;
+	/* Impedir scroll na página inteira */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -10,9 +17,38 @@ body {
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-attachment: fixed;
-	height: auto;
-	width: auto;
+	width: 100%;
 	border: none;
+	overflow: auto;
+	scrollbar-width: none;
+	/* Firefox */
+	scrollbar-color: transparent transparent;
+	/* Define a cor da barra e do thumb como transparente */
+}
+
+
+/* Estilizando o scrollbar lateral */
+body::-webkit-scrollbar {
+	width: 12px;
+	/* largura do scrollbar */
+	background-color: transparent;
+	/* cor de fundo do scrollbar */
+}
+
+body::-webkit-scrollbar-thumb {
+	background-color: transparent;
+	/* cor do thumb do scrollbar */
+	border-radius: 6px;
+	/* borda do thumb do scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+	background-color: rgb(128, 0, 128);
+	/* cor do thumb do scrollbar ao passar o mouse */
 }
 
 
@@ -82,7 +118,7 @@ body {
 	width: 100% !important;
 	height: auto;
 	border-radius: 10px;
-	
+
 }
 
 
@@ -142,9 +178,39 @@ body {
 	align-items: center;
 }
 
-.modal {
-	
+
+.modal-body {
+
 	display: flex;
-	flex-direction: row;
-	background-color: red;
-	}
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#tabelaresultados_wrapper {
+	overflow-x: auto;
+	border-radius: 5px;
+	height: calc(auto - 50px);
+	/* Ajustar altura - 50px para outros elementos */
+	width: 100%;
+	max-height: 100%;
+	/* Limitar altura da tabela ao viewport */
+}
+
+#tabelaresultados {
+	border-radius: 5px;
+	width: 100%;
+	table-layout: fixed;
+}
+
+#tabelaresultados td {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+#tabelaresultados th,
+#tabelaresultados td {
+	height: 30px;
+	padding: 5px;
+}
