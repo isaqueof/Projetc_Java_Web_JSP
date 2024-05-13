@@ -5,7 +5,7 @@
 	<groupId>project_Java_Web_Jsp</groupId>
 	<artifactId>project_Java_Web_Jsp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>project_Java_Web_Jsp</name>
 	<description>project Java Web Jsp</description>
 
