@@ -20,7 +20,7 @@
 <body>
 
 	<div class="divInicial">
-		<div class="inicial">
+		<div class="inicial"> 
 			<div class="log" data-tiltdata-tilt data-tilt-max="50"
 				data-tilt-speed="400" data-tilt-perspective="500">
 				<label class="textLabel" for="senha">Faça seu Login!!!</label>
