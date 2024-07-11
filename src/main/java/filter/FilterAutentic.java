@@ -50,7 +50,7 @@ public class FilterAutentic implements Filter {
 
 			if (usuarioLogado == null && !urlAtenticacao.equalsIgnoreCase("/principal/ServletLogin")) {
 
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp?url=" + urlAtenticacao);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/login.html?url=" + urlAtenticacao);
 				request.setAttribute("msg", "Por Favor Realize o Login!!!");
 				dispatcher.forward(request, response);
 				return;

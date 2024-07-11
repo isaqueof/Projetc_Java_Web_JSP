@@ -38,7 +38,7 @@ public class ServeletCadastro extends HttpServlet {
 				daoCadastro.deletarCadastro(idUser);
 				request.setAttribute("msg", "Usuário " + idUser + " deletado com sucesso !!!");
 
-				request.getRequestDispatcher("principal/pagePrincipal.jsp").forward(request, response);
+				request.getRequestDispatcher("principal/pagePrincipal.html").forward(request, response);
 
 			} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletarajax")) {
 
@@ -65,6 +65,7 @@ public class ServeletCadastro extends HttpServlet {
 			}
 
 		} catch (Exception e) {
+
 			e.printStackTrace();
 			RequestDispatcher redirecionar = request.getRequestDispatcher("/error.jsp");
 			request.setAttribute("msg", e.getMessage());

@@ -15,12 +15,9 @@
 
 </head>
 
-<!--JS-->
-
 <body>
-
 	<div class="divInicial">
-		<div class="inicial"> 
+		<div class="inicial">
 			<div class="log" data-tiltdata-tilt data-tilt-max="50"
 				data-tilt-speed="400" data-tilt-perspective="500">
 				<label class="textLabel" for="senha">Faça seu Login!!!</label>
@@ -46,17 +43,11 @@
 							class="f-w-600 p-l-5 corText2"> Inscreva-se agora</a>
 					</div>
 				</form>
-
-
-
 			</div>
-
 		</div>
-
 	</div>
 
 	<h4 id="texto" class="textoResposta">${msg}</h4>
-
 
 	<!-- JavaScript (Opcional) -->
 	<!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->

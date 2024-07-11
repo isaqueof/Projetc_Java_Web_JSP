@@ -10,7 +10,7 @@
 <!-- Bootstrap CSS -->
 <link href="webjars/bootstrap/5.3.3/css/bootstrap.min.css"
 	rel="stylesheet" />
-<link rel="stylesheet" href="css/style_principal.css">
+<link rel="stylesheet" href="css/style_pricipal.css">
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
@@ -44,7 +44,7 @@
 		<div class="menu">
 
 			<ul class="nav ">
-				<li class="nav-item " data-bs-toggle="modal"
+				<li class="nav-item" data-bs-toggle="modal"
 					data-bs-target="#exampleModal"><a class="nav-link active"
 					aria-current="page" href="#">Cadastro</a></li>
 				<li class="nav-item"><a class="nav-link" href="#">Load XML</a></li>

@@ -19,8 +19,8 @@
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#"> <img
 				src="assets/bootstrap-logo.svg" alt="" width="30" height="24"
-				class="d-inline-block align-text-top"> Bootstrap
-			</a> <a class="navbar-brand" href="#">Offcanvas dark navbar</a>
+				class="d-inline-block align-text-top"> FIWTECH
+			</a> <a class="navbar-brand" href="#"></a>
 o
 			<button class="navbar-toggler" type="button"
 				data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
@@ -38,23 +38,23 @@ o
 
 				<div class="offcanvas-body">
 					<ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-						<li class="nav-item"><a class="nav-link active"
+						<li class="nav-item"><a class="nav-link active link-nav"
 							aria-current="page" href="#">Home</a></li>
-						<li class="nav-item"><a class="nav-link" href="#">Link</a></li>
+						<li class="nav-item"><a class="nav-link link-nav" href="#">Link</a></li>
 						<li class="nav-item dropdown"><a
-							class="nav-link dropdown-toggle" href="#" role="button"
+							class="nav-link dropdown-toggle link-nav" href="#" role="button"
 							data-bs-toggle="dropdown" aria-expanded="false"> Dropdown </a>
 							<ul class="dropdown-menu dropdown-menu-dark">
-								<li><a class="dropdown-item" href="#">Action</a></li>
-								<li><a class="dropdown-item" href="#">Another action</a></li>
+								<li><a class="dropdown-item link-nav" href="#">Action</a></li>
+								<li><a class="dropdown-item link-nav" href="#">Another action</a></li>
 								<li>
-									<hr class="dropdown-divider">
+									<hr class="dropdown-divider link-nav">
 								</li>
-								<li><a class="dropdown-item" href="#">Something else
+								<li><a class="dropdown-item link-nav" href="#">Something else
 										here</a></li>
 							</ul></li>
 
-						<li class="nav-item"><a class="nav-link"
+						<li class="nav-item"><a class="nav-link link-nav"
 							href="<%=request.getContextPath()%>/ServletLogin?acao=logout"><i
 								class="icon-logout"></i> Logout</a></li>
 					</ul>

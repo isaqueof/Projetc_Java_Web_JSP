@@ -26,7 +26,7 @@ function listUsers() {
 					+ '</td> <td> ' + user.rg
 					+ '</td> <td> ' + user.aso
 					+ '</td> <td> ' + user.dataaso
-					+ '</td> <td> <button class="btn btn-sm btn-primary editar-btn" type="button"><i class="fa-solid fa-pencil"></i></button><button class="btn btn-success btn-sm salvar-btn" style="display: none;" type="button"><i class="fa-solid fa-download"></i></button></td>'
+					+ '</td> <td> <button class="btn btn-sm btn-primary editar-btn" type="button"><i class="fa-solid fa-pencil"></i></button><button class="btn btn-success btn-sm salvar-btn" onclick="salvarLinha(' + user.id + ')" style="display: none;" type="button"><i class="fa-solid fa-download"></i> Salvar</button></td>'
 					+ '</td> <td> <button class="btn btn-sm btn-danger" onclick="criarDeleteComAjax(' + user.id + ')" type="button"><i class="fa-solid fa-trash-can" ></i></button></td></tr>';
 			});
 
@@ -180,22 +180,21 @@ function salvarLinha(id) {
 	// Faça uma chamada AJAX para salvar os dados editados no servidor
 	let urlAction = document.getElementById('formUser').action;
 	$.ajax({
-		method: "get",
-		type: "UPDATE",
-		url: urlAction,
-		data: "id=" + id + '&acao=salvaAjax',
+		method: "POST",
+        		type: 'UPDATE',
+        		url: urlAction,
+        		data: "id=" + id + '&acao=salvaAjax',
 		success: function(response) {
-
 			console.log('Dados atualizados com sucesso!');
-
+			$('#tabelaresultados').DataTable().clear().destroy();
+                listUsers();
 		},
-		error: function() {
-			alert('Ocorreu um erro ao comunicar com o servidor.');
+		error: function(xhr, status, errorThrown) {
+			alert('Ocorreu um erro ao comunicar com o servidor.' + status);
 		}
 	}).fail(function(xhr, status, errorThrown) {
 		alert('Erro ao deletar usuário por id: ' + xhr + '  ' + status + ' ' + errorThrown);
 	});
-
 }
 
 
@@ -206,7 +205,7 @@ $(document).ready(function() {
 	// Evento de clique no botão "Editar"
 	$("#tabelaresultados").on("click", ".editar-btn", function() {
 		let linha = $(this).closest("tr");
-		linha.find("td:nth-child(n+2):nth-child(-n+9)").each(function() { // Colunas 2 a 9
+		linha.find("td:nth-child(n+1):nth-child(-n+8)").each(function() { // Colunas 2 a 9
 			let valor = $(this).text();
 			$(this).html('<input type="text" value="' + valor + '">');
 		});
@@ -218,17 +217,18 @@ $(document).ready(function() {
 	// Evento de clique no botão "Salvar"
 	$("#tabelaresultados").on("click", ".salvar-btn", function() {
 		let linha = $(this).closest("tr");
-		linha.find("td:nth-child(n+2):nth-child(-n+9) input").each(function() { // Colunas 2 a 9
+		linha.find("td:nth-child(n+1):nth-child(-n+8) input").each(function() { // Colunas 2 a 9
 			let novoValor = $(this).val();
 			$(this).parent().html(novoValor);
 		});
 		linha.find(".salvar-btn").hide();
 		linha.find(".editar-btn").show();
 		editando = false; // Marcando como não editando quando o botão "Salvar" é clicado
+
 	});
 
 	// Evento de clique nas células do tbody
-	$("#tableBody_users").on("click", "td:nth-child(-n+9)", function() {
+	$("#tableBody_users").on("click", "td:nth-child(-n+8)", function() {
 		clicks++; // Incrementa o contador de cliques
 		if (clicks === 1) { // Se for o primeiro clique
 			timeout = setTimeout(function() {

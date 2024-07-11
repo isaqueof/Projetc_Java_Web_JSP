@@ -4,12 +4,14 @@ body {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	background: url("assets/1306628.png");
+	background: url("assets/2150038853.jpg");
+	-webkit-backdrop-filter: blur(5px); backdrop-filter : blur( 5px);
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-attachment: fixed;
 	height: 100dvh;
+	backdrop-filter: blur(8px);
 }
 
 .divInicial {
@@ -17,7 +19,6 @@ body {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-
 }
 
 .inicial {
@@ -26,7 +27,6 @@ body {
 	align-items: center;
 	height: 100%;
 	width: 100%;
-
 }
 
 .log {
@@ -48,9 +48,7 @@ body {
 	z-index: 1;
 }
 
-input[type="text"],
-input[type="password"],
-select {
+input[type="text"], input[type="password"], select {
 	width: 100%;
 	padding: 12px 20px;
 	margin: 8px 0;
@@ -66,7 +64,6 @@ select {
 	right: 30px;
 	cursor: pointer;
 	opacity: 0.3;
-
 }
 
 #olho {
@@ -80,9 +77,6 @@ select {
 	top: 200px;
 	right: 30px;
 }
-
-
-
 
 input[type="submit"] {
 	width: 100%;
@@ -109,7 +103,6 @@ label {
 	padding-bottom: 25px;
 }
 
-
 .textoResposta {
 	display: flex;
 	flex-direction: column;
@@ -128,17 +121,14 @@ label {
 	font-weight: 400;
 	font-size: large;
 	color: wheat;
-
 }
 
 .corText2 {
 	font-weight: 600;
 	font-size: large;
 	color: wheat;
-
 }
 
 .corText2:hover {
 	color: #20cc29;
-
 }

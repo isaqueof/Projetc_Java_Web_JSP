@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.io.Serial;
 
 import dao.DAOLoginRepository;
 import jakarta.servlet.RequestDispatcher;
@@ -14,9 +15,10 @@ import model.ModelLogin;
 @WebServlet(urlPatterns = { "/principal/ServletLogin", "/ServletLogin"}) /*Mapeamento de URL que vem da tela*/
 public class ServletLogin extends HttpServlet {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
-	private DAOLoginRepository daoLoginRepository = new DAOLoginRepository();
+	private final DAOLoginRepository daoLoginRepository = new DAOLoginRepository();
 
 	public ServletLogin() {
 
@@ -27,7 +29,7 @@ public class ServletLogin extends HttpServlet {
 
 		String acao = request.getParameter("acao");
 
-		if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("logout")) {
+		if (acao != null && acao.equalsIgnoreCase("logout")) {
 			request.getSession().invalidate();// invalida a sessão
 			RequestDispatcher redirecionar = request.getRequestDispatcher("/login.jsp");
 			redirecionar.forward(request, response);

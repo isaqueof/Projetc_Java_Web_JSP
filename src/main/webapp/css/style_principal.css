@@ -1,7 +1,6 @@
 @charset "UTF-8";
 
 body {
-
 	margin: 0;
 	padding: 0;
 	height: 100%;
@@ -12,7 +11,8 @@ body {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	background-image: linear-gradient(180deg, #bf90f2 0, #8f6cd8 50%, #594bbf 100%);
+	background-image: radial-gradient(circle at 46.72% 12.54%, #ffffff 0, #ffffff 25%, #ffffff
+		50%, #f4f8f7 75%, #e9f2ef 100%);
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -23,9 +23,10 @@ body {
 	scrollbar-width: none;
 	/* Firefox */
 	scrollbar-color: transparent transparent;
+	background-position: center;
+	background-position: center;
 	/* Define a cor da barra e do thumb como transparente */
 }
-
 
 /* Estilizando o scrollbar lateral */
 body::-webkit-scrollbar {
@@ -51,19 +52,19 @@ body::-webkit-scrollbar-thumb:hover {
 	/* cor do thumb do scrollbar ao passar o mouse */
 }
 
-
 .bt {
 	border: none;
 	color: white;
-	background: linear-gradient(155deg, #82ffe3 0, #6effe2 12.5%, #5bfdde 25%, #4cead7 37.5%, #42d4cb 50%, #3dbfbe 62.5%, #3bacb1 75%, #3b9ca5 87.5%, #3c8e9a 100%);
+	background: linear-gradient(155deg, #82ffe3 0, #6effe2 12.5%, #5bfdde 25%, #4cead7
+		37.5%, #42d4cb 50%, #3dbfbe 62.5%, #3bacb1 75%, #3b9ca5 87.5%, #3c8e9a
+		100%);
 }
 
 .bt:hover {
-
-	background: linear-gradient(155deg, #ff8e2a 0, #ff7d34 12.5%, #fb6a3c 25%, #ea5640 37.5%, #d44242 50%, #bd2f42 62.5%, #a71f42 75%, #941142 87.5%, #840542 100%);
-
+	background: linear-gradient(155deg, #ff8e2a 0, #ff7d34 12.5%, #fb6a3c 25%, #ea5640
+		37.5%, #d44242 50%, #bd2f42 62.5%, #a71f42 75%, #941142 87.5%, #840542
+		100%);
 }
-
 
 .divFomulario {
 	display: flex;
@@ -72,8 +73,6 @@ body::-webkit-scrollbar-thumb:hover {
 	justify-content: center;
 	width: 100%;
 	height: 100%;
-
-
 }
 
 .form1 {
@@ -83,8 +82,6 @@ body::-webkit-scrollbar-thumb:hover {
 	justify-content: start;
 	padding: 40px;
 	width: 100%;
-
-
 }
 
 .logout {
@@ -92,14 +89,12 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .pesquisar {
-
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	padding-top: 100px;
 	height: auto;
 	width: 100%;
-
 }
 
 .input-group {
@@ -118,69 +113,65 @@ body::-webkit-scrollbar-thumb:hover {
 	width: 100% !important;
 	height: auto;
 	border-radius: 10px;
-
 }
-
-
 
 .table {
 	padding: 10px;
 	border-radius: 10px;
 	overflow: hidden;
-
 }
 
 .table-group-divider {
-
-	box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+	box-shadow: 0 8px 32px 0 rgb(23, 142, 62);
 	-webkit-backdrop-filter: blur(9px);
 	backdrop-filter: blur(10px);
-
 }
 
 .menu {
-
 	width: 90%;
 	height: auto;
-	background-color: rgba(31, 38, 135, 0.1);
-	box-shadow: 0 8px 32px 0 rgb(64, 0, 128);
+	background-color: white !important;
+	box-shadow: 0 8px 20px 0 rgb(2, 10, 77);
 	-webkit-backdrop-filter: blur(9px);
 	backdrop-filter: blur(10px);
 	border-radius: 5px;
 	font-weight: bold;
-
 }
 
 .nav-link {
-	color: wheat;
+	color: rgb(50, 0, 100) !important;
 }
 
 .nav-link:hover {
-	color: rgb(255, 255, 255);
+	color: rgb(255, 255, 255) !important;
 	background-color: rgb(50, 0, 100);
 	border-radius: 5px;
 	font-weight: bold;
 }
 
-.cadastroInput {
-
-	display: flex;
-	flex-direction: column;
-
-
+.link-nav {
+	color: rgb(255, 255, 255) !important;
+}
+	
+.link-nav:hover {
+	color: rgb(50, 0, 100) !important;
+	background-color: rgb(255, 255, 255) !important;
+	border-radius: 5px;
+	font-weight: bold;
 }
 
+.cadastroInput {
+	display: flex;
+	flex-direction: column;
+}
 
 .msgTabela {
-
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
-
 .modal-body {
-
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -209,8 +200,23 @@ body::-webkit-scrollbar-thumb:hover {
 	text-overflow: ellipsis;
 }
 
-#tabelaresultados th,
-#tabelaresultados td {
+#tabelaresultados th, #tabelaresultados td {
 	height: 30px;
 	padding: 5px;
 }
+
+#tabelaresultados td:hover  {
+     background: red;
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

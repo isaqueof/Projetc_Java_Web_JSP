@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.List;
 
 import dao.DAOUsuaryRepository;
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @WebServlet(urlPatterns = { "/ServletUsuarioController" })
 public class ServletUsuarioController extends HttpServlet {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	static DAOUsuaryRepository daoUsuaryRepository = new DAOUsuaryRepository();
