@@ -63,7 +63,13 @@ public class DAOcadastro {
 			preparedStatement.setString(8, objeto.getDataaso());
 			preparedStatement.setLong(9, objeto.getId());
 
-			preparedStatement.executeUpdate();
+			// Log de depuração
+			System.out.println("Atualizando cadastro: " + objeto.toString());
+
+			int rowsUpdated = preparedStatement.executeUpdate();
+			if (rowsUpdated > 0) {
+				System.out.println("Cadastro atualizado com sucesso!");
+			}
 			connection.commit();
 		} catch (SQLException e) {
 			connection.rollback();

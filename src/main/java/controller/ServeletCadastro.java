@@ -106,11 +106,21 @@ public class ServeletCadastro extends HttpServlet {
 			modelCadastro.setAso(aso);
 			modelCadastro.setDataaso(dataaso);
 
+			// Log de depuração
+			System.out.println("ID: " + id);
+			System.out.println("Centro de Custo: " + centrodecusto);
+			System.out.println("Função: " + funcao);
+			System.out.println("Nome: " + nome);
+			System.out.println("Data de Nascimento: " + datanascimento);
+			System.out.println("CPF: " + cpf);
+			System.out.println("RG: " + rg);
+			System.out.println("ASO: " + aso);
+			System.out.println("Data ASO: " + dataaso);
+
 			String acao = request.getParameter("acao");
 			if (acao != null && acao.equalsIgnoreCase("salvaAjax")) {
-				// Certifique-se de inicializar seu DAO antes de usá-lo
-				DAOcadastro daoCad = new DAOcadastro(); // Aqui estou assumindo que você tem um construtor padrão para
-														// DAOCadastro
+
+				DAOcadastro daoCad = new DAOcadastro();
 				daoCad.gravarCadastro(modelCadastro);
 				response.getWriter().write("Atualizado com sucesso!");
 			} else {

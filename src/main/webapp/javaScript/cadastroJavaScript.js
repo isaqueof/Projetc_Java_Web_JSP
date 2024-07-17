@@ -3,85 +3,87 @@ window.addEventListener('load', () => {
 });
 
 function listUsers() {
-	const urlAction = document.getElementById('formUser').action;
+    const urlAction = document.getElementById('formUser').action;
 
-	$(".alert").alert('dispose')
-	$(".alert").alert('dispose')
-	$.ajax({
-		method: "get",
-		url: urlAction,
-		data: '&acao=buscarCadastroAjax',
-		success: function(response, xhr, status) {
+    $(".alert").alert('dispose')
+    $(".alert").alert('dispose')
+    $.ajax({
+        method: "get",
+        url: urlAction,
+        data: '&acao=buscarCadastroAjax',
+        success: function(response, xhr, status) {
+            const json = JSON.parse(response);
+            let ind = '';
 
-			const json = JSON.parse(response);
+            json.forEach((user, index) => {
+                ind += '<tr id="row-' + user.id + '">'; // Adiciona o ID à linha aqui
+                ind += '<td style="display: none;">' + user.id + '</td>';
+                ind += '<td>' + user.centrodecusto + '</td>';
+                ind += '<td>' + user.funcao + '</td>';
+                ind += '<td>' + user.nome + '</td>';
+                ind += '<td>' + user.datanascimento + '</td>';
+                ind += '<td>' + user.cpf + '</td>';
+                ind += '<td>' + user.rg + '</td>';
+                ind += '<td>' + user.aso + '</td>';
+                ind += '<td>' + user.dataaso + '</td>';
+                ind += '<td><button class="btn btn-sm btn-primary editar-btn" type="button"><i class="fa-solid fa-pencil"></i></button>';
+                ind += '<button class="btn btn-success btn-sm salvar-btn" onclick="salvarLinha(' + user.id + ')" style="display: none;" type="button"><i class="fa-solid fa-download"></i> Salvar</button></td>';
+                ind += '<td><button class="btn btn-sm btn-danger" onclick="criarDeleteComAjax(' + user.id + ')" type="button"><i class="fa-solid fa-trash-can"></i></button></td>';
+                ind += '</tr>';
+            });
 
-			let ind = '';
-			json.forEach((user, index) => {
-				ind += '<tr> <td style="display: none;">' + user.id
-					+ '</td> <td> ' + user.centrodecusto
-					+ '</td> <td> ' + user.funcao
-					+ '</td> <td> ' + user.nome
-					+ '</td> <td> ' + user.datanascimento
-					+ '</td> <td> ' + user.cpf
-					+ '</td> <td> ' + user.rg
-					+ '</td> <td> ' + user.aso
-					+ '</td> <td> ' + user.dataaso
-					+ '</td> <td> <button class="btn btn-sm btn-primary editar-btn" type="button"><i class="fa-solid fa-pencil"></i></button><button class="btn btn-success btn-sm salvar-btn" onclick="salvarLinha(' + user.id + ')" style="display: none;" type="button"><i class="fa-solid fa-download"></i> Salvar</button></td>'
-					+ '</td> <td> <button class="btn btn-sm btn-danger" onclick="criarDeleteComAjax(' + user.id + ')" type="button"><i class="fa-solid fa-trash-can" ></i></button></td></tr>';
-			});
+            $('#tableBody_users').html(ind);
+            if ($.fn.DataTable.isDataTable('#tabelaresultados')) {
+                $('#tabelaresultados').DataTable().clear().destroy();
+            }
+            $(document).ready(function() {
+                $('#tabelaresultados').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/2.0.5/i18n/pt-BR.json',
+                    },
+                    layout: {
+                        top: {
+                            buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                        }
+                    },
+                    responsive: true,
+                    columnDefs: [
+                        { className: "text-center", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+                        { responsivePriority: 1, targets: 0 , visible: false}, // ID - Maior prioridade
+                        { responsivePriority: 2, targets: 1 }, // Centro de Custo
+                        { responsivePriority: 3, targets: 2 }, // Função
+                        { responsivePriority: 4, targets: 3 }, // Nome
+                        { responsivePriority: 5, targets: 4 }, // Data nascimento
+                        { responsivePriority: 6, targets: 5 }, // CPF
+                        { responsivePriority: 7, targets: 6 }, // RG
+                        { responsivePriority: 8, targets: 7 }, // ASO
+                        { responsivePriority: 9, targets: 8 }, // Data ASO
+                        { responsivePriority: 10, targets: 9 }, // Editar
+                        { responsivePriority: 11, targets: 10 } // Options
+                    ],
+                    columns: [
+                        { title: 'ID', width: 'auto' },
+                        { title: 'Centro de Custo', width: 'auto' },
+                        { title: 'Função', width: 'auto' },
+                        { title: 'Nome', width: 'auto' },
+                        { title: 'Data nascimento', width: 'auto' },
+                        { title: 'Cpf', width: 'auto' },
+                        { title: 'Rg', width: 'auto' },
+                        { title: 'Aso', width: 'auto' },
+                        { title: 'Data Aso', width: 'auto' },
+                        { title: 'Editar', width: 'auto' },
+                        { title: 'Options', width: 'auto' }
+                    ]
+                });
+            });
+        }
 
-			$('#tableBody_users').html(ind);
-			if ($.fn.DataTable.isDataTable('#tabelaresultados')) {
-				$('#tabelaresultados').DataTable().clear().destroy();
-			}
-			$(document).ready(function() {
-				$('#tabelaresultados').DataTable({
-					language: {
-						url: '//cdn.datatables.net/plug-ins/2.0.5/i18n/pt-BR.json',
-					},
-					layout: {
-						top: {
-							buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-						}
-					},
-					// Torna o DataTable responsivo
-					responsive: true,
-					columnDefs: [
-						{ className: "text-center", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
-						{ responsivePriority: 1, targets: 0 , visible: false}, // ID - Maior prioridade
-						{ responsivePriority: 2, targets: 1 }, // Centro de Custo
-						{ responsivePriority: 3, targets: 2 }, // Função
-						{ responsivePriority: 4, targets: 3 }, // Nome
-						{ responsivePriority: 5, targets: 4 }, // Data nascimento
-						{ responsivePriority: 6, targets: 5 }, // CPF
-						{ responsivePriority: 7, targets: 6 }, // RG
-						{ responsivePriority: 8, targets: 7 }, // ASO
-						{ responsivePriority: 9, targets: 8 }, // Data ASO
-						{ responsivePriority: 10, targets: 9 }, // Editar
-						{ responsivePriority: 11, targets: 10 } // Options
-					],
-					columns: [
-						{ title: 'ID', width: 'auto' }, // Define a largura da coluna ID automaticamente
-						{ title: 'Centro de Custo', width: 'auto' }, // Define a largura da coluna Centro de Custo automaticamente
-						{ title: 'Função', width: 'auto' }, // Define a largura da coluna Função automaticamente
-						{ title: 'Nome', width: 'auto' }, // Define a largura da coluna Nome automaticamente
-						{ title: 'Data nascimento', width: 'auto' }, // Define a largura da coluna Data nascimento automaticamente
-						{ title: 'Cpf', width: 'auto' }, // Define a largura da coluna CPF automaticamente
-						{ title: 'Rg', width: 'auto' }, // Define a largura da coluna RG automaticamente
-						{ title: 'Aso', width: 'auto' }, // Define a largura da coluna ASO automaticamente
-						{ title: 'Data Aso', width: 'auto' }, // Define a largura da coluna Data Aso automaticamente
-						{ title: 'Editar', width: 'auto' }, // Define a largura da coluna Editar automaticamente
-						{ title: 'Options', width: 'auto' } // Define a largura da coluna Options automaticamente
-					]
-				});
-			});
-		}
-
-	}).fail(function(xhr, status, errorThrown) {
-		alert('Erro ao buscar usuário por nome: ' + xhr.responseText + '\n================================' + errorThrown + '================================' + status);
-	});
+    }).fail(function(xhr, status, errorThrown) {
+        alert('Erro ao buscar usuário por nome: ' + xhr.responseText + '\n================================' + errorThrown + '================================' + status);
+    });
 
 }
+
 
 function gravarCadastro() {
 	// Coletar os valores dos campos do formulário
@@ -122,6 +124,63 @@ function gravarCadastro() {
 	fecharModalELimparFormulario();
 }
 
+function salvarLinha(id) {
+
+    // Verificar o ID que está sendo usado
+        console.log('ID da linha:', id);
+
+        // Encontrar a linha da tabela pelo ID
+        var row = document.getElementById('row-' + id);
+        console.log('Elemento da linha:', row);
+
+        if (!row) {
+            console.error('Linha não encontrada para o ID:', id);
+            return;
+        }
+
+    // Coletar dados da linha
+    var formData = new FormData();
+    formData.append('id', id);  // ID do usuário para identificação no banco de dados
+    formData.append('centrodecusto', row.cells[1].innerText.trim());
+    formData.append('funcao', row.cells[2].innerText.trim());
+    formData.append('nome', row.cells[3].innerText.trim());
+    formData.append('datanascimento', row.cells[4].innerText.trim());
+    formData.append('cpf', row.cells[5].innerText.trim());
+    formData.append('rg', row.cells[6].innerText.trim());
+    formData.append('aso', row.cells[7].innerText.trim());
+    formData.append('dataaso', row.cells[8].innerText.trim());
+    formData.append('acao', 'salvaAjax');
+    // URL para enviar os dados via AJAX
+    var urlAction = document.getElementById('formUser').action;
+
+    // Enviar o FormData via AJAX
+    $.ajax({
+        method: "POST",
+        url: urlAction,
+        data: formData,
+        processData: false, // impedir o jQuery de processar os dados
+        contentType: false, // impedir o jQuery de definir o contentType
+        success: function(response) {
+            console.log('Resposta do servidor:', response);
+            // Exibir mensagem de sucesso ou tomar outras ações necessárias
+            alert('Cadastro atualizado com sucesso!');
+            // Recarregar o DataTable após o cadastro ser realizado com sucesso
+            if ($.fn.DataTable.isDataTable('#tabelaresultados')) {
+                $('#tabelaresultados').DataTable().clear().destroy();
+                listUsers();
+            }
+        },
+        error: function(xhr, status, errorThrown) {
+            // Exibir mensagem de erro ou tomar outras ações necessárias
+            alert('Ocorreu um erro ao atualizar o cadastro: ' + xhr.responseText);
+            console.error('Erro ao atualizar cadastro:', xhr, status, errorThrown);
+        }
+    });
+}
+
+
+
+
 // Função para fechar o modal e limpar o formulário
 function fecharModalELimparFormulario() {
 	// Fechar o modal
@@ -158,43 +217,6 @@ function editarLinha(id) {
 
 	linha.nodes().to$().find('button[onclick^="editarLinha"]').attr('onclick', 'salvarLinha(' + id + ')');
 
-}
-
-function salvarLinha(id) {
-	let tabela = $('#tabelaresultados').DataTable();
-	let linha = tabela.row(function(idx, data, node) {
-		return data[0] === id ? true : false;
-	});
-
-	let dadosEditados = {};
-
-	linha.nodes().to$().find('td').each(function(index) {
-		let celula = $(this);
-		let valor = celula.find('input').val();
-		celula.empty().text(valor);
-		dadosEditados[tabela.columns(index).header().innerText] = valor;
-	});
-
-	linha.nodes().to$().find('button[onclick^="salvarLinha"]').attr('onclick', 'editarLinha(' + id + ')');
-
-	// Faça uma chamada AJAX para salvar os dados editados no servidor
-	let urlAction = document.getElementById('formUser').action;
-	$.ajax({
-		method: "POST",
-        		type: 'UPDATE',
-        		url: urlAction,
-        		data: "id=" + id + '&acao=salvaAjax',
-		success: function(response) {
-			console.log('Dados atualizados com sucesso!');
-			$('#tabelaresultados').DataTable().clear().destroy();
-                listUsers();
-		},
-		error: function(xhr, status, errorThrown) {
-			alert('Ocorreu um erro ao comunicar com o servidor.' + status);
-		}
-	}).fail(function(xhr, status, errorThrown) {
-		alert('Erro ao deletar usuário por id: ' + xhr + '  ' + status + ' ' + errorThrown);
-	});
 }
 
 
@@ -282,5 +304,3 @@ function criarDeleteComAjax(id) {
 	});
 
 }
-
-
