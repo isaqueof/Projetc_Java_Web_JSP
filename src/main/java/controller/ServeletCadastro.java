@@ -70,6 +70,24 @@ public class ServeletCadastro extends HttpServlet {
             String aso = request.getParameter("aso");
             String dataaso = request.getParameter("dataaso");
 
+            /*String acao = request.getParameter("acao");
+            if ("uploadPdf".equals(acao)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                Part filePart = request.getPart("file"); // Obtém o arquivo do upload
+                String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // Nome do arquivo
+                String filePath = "/path/to/upload/directory/" + id + "_" + fileName;
+
+                // Salva o arquivo
+                try (InputStream fileContent = filePart.getInputStream()) {
+                    Files.copy(fileContent, Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+                }
+
+                // Atualiza o banco de dados com o caminho do arquivo
+                // Atualize a lógica para armazenar o caminho do arquivo associado ao ID
+
+                response.getWriter().print("Arquivo enviado com sucesso.");
+            }*/
+
             // Verifica se todos os parâmetros necessários estão presentes
             if (centrodecusto == null || funcao == null || nome == null || datanascimento == null || cpf == null
                     || rg == null || aso == null || dataaso == null) {

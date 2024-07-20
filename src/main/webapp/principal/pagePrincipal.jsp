@@ -39,7 +39,6 @@
 
 	<jsp:include page="navBar.jsp"></jsp:include>
 
-
 	<div class="pesquisar">
 		<div class="menu">
 
@@ -77,7 +76,8 @@
 									<th scope="col">Aso</th>
 									<th scope="col">Data Aso</th>
 									<th scope="col">Editar</th>
-									<th scope="col">Options</th>
+									<th scope="col">Arquivos</th>
+									<th scope="col">Deletar</th>
 
 								</tr>
 							</thead>

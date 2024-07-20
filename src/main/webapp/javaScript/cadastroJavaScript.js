@@ -26,11 +26,28 @@ function listUsers() {
                 ind += '<td data-field="rg">' + user.rg + '</td>';
                 ind += '<td data-field="aso">' + user.aso + '</td>';
                 ind += '<td data-field="dataaso">' + user.dataaso + '</td>';
-                ind += '<td><button class="btn btn-sm btn-primary editar-btn" type="button"><i class="fa-solid fa-pencil"></i></button>';
-                ind += '<button class="btn btn-success btn-sm salvar-btn" onclick="salvarLinha(' + user.id + ')" style="display: none;" type="button"><i class="fa-solid fa-download"></i> Salvar</button></td>';
-                ind += '<td><button class="btn btn-sm btn-danger" onclick="criarDeleteComAjax(' + user.id + ')" type="button"><i class="fa-solid fa-trash-can"></i></button></td>';
+
+                // Adiciona os botões Editar e Salvar
+                ind += '<td>';
+                ind += '<button class="btn btn-sm btn-primary editar-btn" type="button"><i class="fa-solid fa-pencil"></i></button>';
+                ind += '<button class="btn btn-success btn-sm salvar-btn" onclick="salvarLinha(' + user.id + ')" style="display: none;" type="button"><i class="fa-solid fa-download"></i> Salvar</button>';
+                ind += '</td>';
+
+                // Adiciona o campo de upload e o link para o PDF
+                ind += '<td>';
+                ind += '<input type="file" class="form-control" id="uploadPdf-' + user.id + '" accept=".pdf" style="display:none;" onchange="uploadPdf(' + user.id + ')">';
+                ind += '<button class="btn btn-sm btn-secondary" onclick="document.getElementById(\'uploadPdf-' + user.id + '\').click()">Upload PDF</button>';
+                ind += '<a href="#" class="btn btn-info btn-sm pdf-link" id="pdf-link-' + user.id + '" target="_blank">Visualizar PDF</a>';
+                ind += '</td>';
+
+                // Adiciona o botão de Delete
+                ind += '<td>';
+                ind += '<button class="btn btn-sm btn-danger" onclick="criarDeleteComAjax(' + user.id + ')" type="button"><i class="fa-solid fa-trash-can"></i></button>';
+                ind += '</td>';
+
                 ind += '</tr>';
             });
+
 
             $('#tableBody_users').html(ind);
             if ($.fn.DataTable.isDataTable('#tabelaresultados')) {
@@ -48,7 +65,7 @@ function listUsers() {
                     },
                     responsive: true,
                     columnDefs: [
-                        { className: "text-center", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+                        { className: "text-center", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
                         { responsivePriority: 1, targets: 0 , visible: false}, // ID - Maior prioridade
                         { responsivePriority: 2, targets: 1 }, // Centro de Custo
                         { responsivePriority: 3, targets: 2 }, // Função
@@ -59,7 +76,8 @@ function listUsers() {
                         { responsivePriority: 8, targets: 7 }, // ASO
                         { responsivePriority: 9, targets: 8 }, // Data ASO
                         { responsivePriority: 10, targets: 9 }, // Editar
-                        { responsivePriority: 11, targets: 10 } // Options
+                        { responsivePriority: 11, targets: 10 }, // Arquivos
+                        { responsivePriority: 12, targets: 11 } // Deletar
                     ],
                     columns: [
                         { title: 'ID', width: 'auto' },
@@ -72,7 +90,8 @@ function listUsers() {
                         { title: 'Aso', width: 'auto' },
                         { title: 'Data Aso', width: 'auto' },
                         { title: 'Editar', width: 'auto' },
-                        { title: 'Options', width: 'auto' }
+                        { title: 'Arquivos', width: 'auto' },
+                        { title: 'Deletar', width: 'auto' }
                     ]
                 });
             });
@@ -161,6 +180,39 @@ function salvarLinha(id) {
                 }
             });
         }
+
+        function uploadPdf(id) {
+            var fileInput = document.getElementById('uploadPdf-' + id);
+            var file = fileInput.files[0];
+            var formData = new FormData();
+            formData.append('file', file);
+            formData.append('id', id);
+            formData.append('acao', 'uploadPdf');
+
+            $.ajax({
+                method: 'POST',
+                url: document.getElementById('formUser').action,
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log(response);
+                    var pdfLink = $('#pdf-link-' + id);
+                    pdfLink.attr('href', '/path/to/upload/directory/' + id + '_' + file.name);
+                    pdfLink.text('Visualizar PDF');
+                },
+                error: function(xhr, status, errorThrown) {
+                    alert('Erro ao fazer upload do arquivo: ' + xhr.responseText);
+                }
+            });
+        }
+
+
+        $(document).on('change', 'input[type="file"]', function() {
+            var id = $(this).attr('id').split('-')[1];
+            uploadPdf(id);
+        });
+
 
 // Função para fechar o modal e limpar o formulário
 function fecharModalELimparFormulario() {

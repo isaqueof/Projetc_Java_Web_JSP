@@ -82,6 +82,7 @@ body::-webkit-scrollbar-thumb:hover {
 	justify-content: start;
 	padding: 40px;
 	width: 100%;
+
 }
 
 .logout {
@@ -205,10 +206,6 @@ body::-webkit-scrollbar-thumb:hover {
 	padding: 5px;
 }
 
-#tabelaresultados td:hover  {
-     background: red;
-
-	}
 	
 	
 	
