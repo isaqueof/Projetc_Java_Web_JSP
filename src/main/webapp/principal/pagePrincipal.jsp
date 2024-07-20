@@ -177,7 +177,7 @@
 
 
 
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="webjars/jquery/3.7.1/jquery.min.js"></script>
 	<!-- JavaScript (Table) -->
 	<script defer

@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class ModelCadastro implements Serializable  {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
@@ -20,10 +22,10 @@ public class ModelCadastro implements Serializable  {
 
 		if (this.id == null) {
 			return true;
-		} else if (this.id != null && this.id > 0) {
+		} else if (this.id > 0) {
 			return false;
 		}
-		return this.id == null;
+		return false;
 	}
 
 	public Long getId() {

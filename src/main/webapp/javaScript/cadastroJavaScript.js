@@ -1,5 +1,5 @@
 window.addEventListener('load', () => {
-	listUsers();
+    listUsers();
 });
 
 function listUsers() {
@@ -18,14 +18,14 @@ function listUsers() {
             json.forEach((user, index) => {
                 ind += '<tr id="row-' + user.id + '">'; // Adiciona o ID à linha aqui
                 ind += '<td style="display: none;">' + user.id + '</td>';
-                ind += '<td>' + user.centrodecusto + '</td>';
-                ind += '<td>' + user.funcao + '</td>';
-                ind += '<td>' + user.nome + '</td>';
-                ind += '<td>' + user.datanascimento + '</td>';
-                ind += '<td>' + user.cpf + '</td>';
-                ind += '<td>' + user.rg + '</td>';
-                ind += '<td>' + user.aso + '</td>';
-                ind += '<td>' + user.dataaso + '</td>';
+                ind += '<td data-field="centrodecusto">' + user.centrodecusto + '</td>';
+                ind += '<td data-field="funcao">' + user.funcao + '</td>';
+                ind += '<td data-field="nome">' + user.nome + '</td>';
+                ind += '<td data-field="datanascimento">' + user.datanascimento + '</td>';
+                ind += '<td data-field="cpf">' + user.cpf + '</td>';
+                ind += '<td data-field="rg">' + user.rg + '</td>';
+                ind += '<td data-field="aso">' + user.aso + '</td>';
+                ind += '<td data-field="dataaso">' + user.dataaso + '</td>';
                 ind += '<td><button class="btn btn-sm btn-primary editar-btn" type="button"><i class="fa-solid fa-pencil"></i></button>';
                 ind += '<button class="btn btn-success btn-sm salvar-btn" onclick="salvarLinha(' + user.id + ')" style="display: none;" type="button"><i class="fa-solid fa-download"></i> Salvar</button></td>';
                 ind += '<td><button class="btn btn-sm btn-danger" onclick="criarDeleteComAjax(' + user.id + ')" type="button"><i class="fa-solid fa-trash-can"></i></button></td>';
@@ -81,7 +81,6 @@ function listUsers() {
     }).fail(function(xhr, status, errorThrown) {
         alert('Erro ao buscar usuário por nome: ' + xhr.responseText + '\n================================' + errorThrown + '================================' + status);
     });
-
 }
 
 
@@ -99,11 +98,11 @@ function gravarCadastro() {
 		acao: "salvaAjax" // Adiciona o parâmetro acao com o valor salvaAjax
 		// Adicione outros campos conforme necessário
 	};
-
+    var urlAction = document.getElementById('formUser').action;
 	// Enviar os dados para a servlet via AJAX
 	$.ajax({
 		method: "POST",
-		url: "ServeletCadastro",
+		url: urlAction,
 		data: formData,
 		success: function(response) {
 			// Exibir mensagem de sucesso ou tomar outras ações necessárias
@@ -114,7 +113,6 @@ function gravarCadastro() {
 				listUsers();
 
 			}
-
 		},
 		error: function(xhr, status, errorThrown) {
 			// Exibir mensagem de erro ou tomar outras ações necessárias
@@ -125,61 +123,44 @@ function gravarCadastro() {
 }
 
 function salvarLinha(id) {
+            var urlAction = document.getElementById('formUser').action;
 
-    // Verificar o ID que está sendo usado
-        console.log('ID da linha:', id);
+            var row = document.getElementById('row-' + id);
 
-        // Encontrar a linha da tabela pelo ID
-        var row = document.getElementById('row-' + id);
-        console.log('Elemento da linha:', row);
-
-        if (!row) {
-            console.error('Linha não encontrada para o ID:', id);
-            return;
-        }
-
-    // Coletar dados da linha
-    var formData = new FormData();
-    formData.append('id', id);  // ID do usuário para identificação no banco de dados
-    formData.append('centrodecusto', row.cells[1].innerText.trim());
-    formData.append('funcao', row.cells[2].innerText.trim());
-    formData.append('nome', row.cells[3].innerText.trim());
-    formData.append('datanascimento', row.cells[4].innerText.trim());
-    formData.append('cpf', row.cells[5].innerText.trim());
-    formData.append('rg', row.cells[6].innerText.trim());
-    formData.append('aso', row.cells[7].innerText.trim());
-    formData.append('dataaso', row.cells[8].innerText.trim());
-    formData.append('acao', 'salvaAjax');
-    // URL para enviar os dados via AJAX
-    var urlAction = document.getElementById('formUser').action;
-
-    // Enviar o FormData via AJAX
-    $.ajax({
-        method: "POST",
-        url: urlAction,
-        data: formData,
-        processData: false, // impedir o jQuery de processar os dados
-        contentType: false, // impedir o jQuery de definir o contentType
-        success: function(response) {
-            console.log('Resposta do servidor:', response);
-            // Exibir mensagem de sucesso ou tomar outras ações necessárias
-            alert('Cadastro atualizado com sucesso!');
-            // Recarregar o DataTable após o cadastro ser realizado com sucesso
-            if ($.fn.DataTable.isDataTable('#tabelaresultados')) {
-                $('#tabelaresultados').DataTable().clear().destroy();
-                listUsers();
+            if (!row) {
+                console.error('Linha não encontrada para o ID:', id);
+                return;
             }
-        },
-        error: function(xhr, status, errorThrown) {
-            // Exibir mensagem de erro ou tomar outras ações necessárias
-            alert('Ocorreu um erro ao atualizar o cadastro: ' + xhr.responseText);
-            console.error('Erro ao atualizar cadastro:', xhr, status, errorThrown);
+
+            const formData = {
+                id: id,
+                centrodecusto: row.querySelector('[data-field="centrodecusto"] input') ? row.querySelector('[data-field="centrodecusto"] input').value : row.querySelector('[data-field="centrodecusto"]').innerText,
+                funcao: row.querySelector('[data-field="funcao"] input') ? row.querySelector('[data-field="funcao"] input').value : row.querySelector('[data-field="funcao"]').innerText,
+                nome: row.querySelector('[data-field="nome"] input') ? row.querySelector('[data-field="nome"] input').value : row.querySelector('[data-field="nome"]').innerText,
+                datanascimento: row.querySelector('[data-field="datanascimento"] input') ? row.querySelector('[data-field="datanascimento"] input').value : row.querySelector('[data-field="datanascimento"]').innerText,
+                cpf: row.querySelector('[data-field="cpf"] input') ? row.querySelector('[data-field="cpf"] input').value : row.querySelector('[data-field="cpf"]').innerText,
+                rg: row.querySelector('[data-field="rg"] input') ? row.querySelector('[data-field="rg"] input').value : row.querySelector('[data-field="rg"]').innerText,
+                aso: row.querySelector('[data-field="aso"] input') ? row.querySelector('[data-field="aso"] input').value : row.querySelector('[data-field="aso"]').innerText,
+                dataaso: row.querySelector('[data-field="dataaso"] input') ? row.querySelector('[data-field="dataaso"] input').value : row.querySelector('[data-field="dataaso"]').innerText,
+                acao: "salvaAjax"
+            };
+
+            $.ajax({
+                method: "POST",
+                url: urlAction,
+                data: formData,
+                success: function(response) {
+                    alert('Cadastro atualizado com sucesso!');
+                    if ($.fn.DataTable.isDataTable('#tabelaresultados')) {
+                        $('#tabelaresultados').DataTable().clear().destroy();
+                        listUsers();
+                    }
+                },
+                error: function(xhr, status, errorThrown) {
+                    alert('Ocorreu um erro ao atualizar o cadastro: ' + xhr.responseText);
+                }
+            });
         }
-    });
-}
-
-
-
 
 // Função para fechar o modal e limpar o formulário
 function fecharModalELimparFormulario() {
@@ -219,57 +200,49 @@ function editarLinha(id) {
 
 }
 
+        $(document).ready(function() {
+            let clicks = 0;
+            let timeout;
 
-$(document).ready(function() {
-	let clicks = 0;
-	let timeout;
+            $("#tabelaresultados").on("click", ".editar-btn", function() {
+                let linha = $(this).closest("tr");
+                linha.find("td[data-field]").each(function() {
+                    let valor = $(this).text();
+                    $(this).html('<input type="text" class="form-control" value="' + valor + '">');
+                });
+                linha.find(".editar-btn").hide();
+                linha.find(".salvar-btn").show();
+            });
 
-	// Evento de clique no botão "Editar"
-	$("#tabelaresultados").on("click", ".editar-btn", function() {
-		let linha = $(this).closest("tr");
-		linha.find("td:nth-child(n+1):nth-child(-n+8)").each(function() { // Colunas 2 a 9
-			let valor = $(this).text();
-			$(this).html('<input type="text" value="' + valor + '">');
-		});
-		linha.find(".editar-btn").hide();
-		linha.find(".salvar-btn").show();
-		editando = true; // Marcando como editando quando o botão "Editar" é clicado
-	});
+            $("#tabelaresultados").on("click", ".salvar-btn", function() {
+                let linha = $(this).closest("tr");
+                linha.find("td[data-field] input").each(function() {
+                    let novoValor = $(this).val();
+                    $(this).parent().text(novoValor);
+                });
+                linha.find(".salvar-btn").hide();
+                linha.find(".editar-btn").show();
 
-	// Evento de clique no botão "Salvar"
-	$("#tabelaresultados").on("click", ".salvar-btn", function() {
-		let linha = $(this).closest("tr");
-		linha.find("td:nth-child(n+1):nth-child(-n+8) input").each(function() { // Colunas 2 a 9
-			let novoValor = $(this).val();
-			$(this).parent().html(novoValor);
-		});
-		linha.find(".salvar-btn").hide();
-		linha.find(".editar-btn").show();
-		editando = false; // Marcando como não editando quando o botão "Salvar" é clicado
+                let id = linha.attr('id').split('-')[1];
+                //salvarLinha(id);
+            });
 
-	});
-
-	// Evento de clique nas células do tbody
-	$("#tableBody_users").on("click", "td:nth-child(-n+8)", function() {
-		clicks++; // Incrementa o contador de cliques
-		if (clicks === 1) { // Se for o primeiro clique
-			timeout = setTimeout(function() {
-				clicks = 0; // Reseta o contador de cliques após o tempo limite
-			}, 300); // Defina o tempo limite em milissegundos para distinguir entre um clique simples e um duplo
-		} else { // Se for o segundo clique (clique duplo)
-			clearTimeout(timeout); // Limpa o tempo limite
-			clicks = 0; // Reseta o contador de cliques
-			let valor = $(this).text();
-			$(this).html('<input type="text" value="' + valor + '">');
-			// Mudar o botão para "Salvar"
-			$(this).closest("tr").find(".editar-btn").hide();
-			$(this).closest("tr").find(".salvar-btn").show();
-		}
-	});
-});
-
-
-
+            $("#tableBody_users").on("click", "td[data-field]", function() {
+                clicks++;
+                if (clicks === 1) {
+                    timeout = setTimeout(function() {
+                        clicks = 0;
+                    }, 300);
+                } else {
+                    clearTimeout(timeout);
+                    clicks = 0;
+                    let valor = $(this).text();
+                    $(this).html('<input type="text" class="form-control" value="' + valor + '">');
+                    $(this).closest("tr").find(".editar-btn").hide();
+                    $(this).closest("tr").find(".salvar-btn").show();
+                }
+            });
+        });
 
 function removerLinhaPorId(id, selector) {
 	// Obtenha a instância da DataTable
