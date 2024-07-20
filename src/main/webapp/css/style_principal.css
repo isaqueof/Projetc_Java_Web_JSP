@@ -4,66 +4,42 @@ body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
-	/* Definir altura total */
+	width: 100%;
 	overflow: hidden;
-	/* Impedir scroll na página inteira */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
-	background-image: radial-gradient(circle at 46.72% 12.54%, #ffffff 0, #ffffff 25%, #ffffff
-		50%, #f4f8f7 75%, #e9f2ef 100%);
+	justify-content: flex-start; /* Alinha o conteúdo no topo */
+	background-image: radial-gradient(circle at 46.72% 12.54%, #ffffff 0, #ffffff 25%, #ffffff 50%, #f4f8f7 75%, #e9f2ef 100%);
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-attachment: fixed;
-	width: 100%;
 	border: none;
-	overflow: auto;
-	scrollbar-width: none;
-	/* Firefox */
-	scrollbar-color: transparent transparent;
-	background-position: center;
-	background-position: center;
-	/* Define a cor da barra e do thumb como transparente */
 }
 
-/* Estilizando o scrollbar lateral */
 body::-webkit-scrollbar {
 	width: 12px;
-	/* largura do scrollbar */
 	background-color: transparent;
-	/* cor de fundo do scrollbar */
 }
 
 body::-webkit-scrollbar-thumb {
 	background-color: transparent;
-	/* cor do thumb do scrollbar */
 	border-radius: 6px;
-	/* borda do thumb do scrollbar */
-}
-
-body::-webkit-scrollbar-track {
-	background-color: transparent;
 }
 
 body::-webkit-scrollbar-thumb:hover {
 	background-color: rgb(128, 0, 128);
-	/* cor do thumb do scrollbar ao passar o mouse */
 }
 
 .bt {
 	border: none;
 	color: white;
-	background: linear-gradient(155deg, #82ffe3 0, #6effe2 12.5%, #5bfdde 25%, #4cead7
-		37.5%, #42d4cb 50%, #3dbfbe 62.5%, #3bacb1 75%, #3b9ca5 87.5%, #3c8e9a
-		100%);
+	background: linear-gradient(155deg, #82ffe3 0, #6effe2 12.5%, #5bfdde 25%, #4cead7 37.5%, #42d4cb 50%, #3dbfbe 62.5%, #3bacb1 75%, #3b9ca5 87.5%, #3c8e9a 100%);
 }
 
 .bt:hover {
-	background: linear-gradient(155deg, #ff8e2a 0, #ff7d34 12.5%, #fb6a3c 25%, #ea5640
-		37.5%, #d44242 50%, #bd2f42 62.5%, #a71f42 75%, #941142 87.5%, #840542
-		100%);
+	background: linear-gradient(155deg, #ff8e2a 0, #ff7d34 12.5%, #fb6a3c 25%, #ea5640 37.5%, #d44242 50%, #bd2f42 62.5%, #a71f42 75%, #941142 87.5%, #840542 100%);
 }
 
 .divFomulario {
@@ -82,7 +58,6 @@ body::-webkit-scrollbar-thumb:hover {
 	justify-content: start;
 	padding: 40px;
 	width: 100%;
-
 }
 
 .logout {
@@ -94,7 +69,6 @@ body::-webkit-scrollbar-thumb:hover {
 	flex-direction: column;
 	align-items: center;
 	padding-top: 100px;
-	height: auto;
 	width: 100%;
 }
 
@@ -103,7 +77,7 @@ body::-webkit-scrollbar-thumb:hover {
 	flex-direction: row;
 	justify-content: center;
 	padding-top: 40px;
-	width: 100em !important;
+	width: 100%;
 }
 
 .lista {
@@ -111,9 +85,6 @@ body::-webkit-scrollbar-thumb:hover {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	width: 100% !important;
-	height: auto;
-	border-radius: 10px;
 }
 
 .table {
@@ -131,7 +102,7 @@ body::-webkit-scrollbar-thumb:hover {
 .menu {
 	width: 90%;
 	height: auto;
-	background-color: white !important;
+	background-color: white;
 	box-shadow: 0 8px 20px 0 rgb(2, 10, 77);
 	-webkit-backdrop-filter: blur(9px);
 	backdrop-filter: blur(10px);
@@ -140,23 +111,23 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .nav-link {
-	color: rgb(50, 0, 100) !important;
+	color: rgb(50, 0, 100);
 }
 
 .nav-link:hover {
-	color: rgb(255, 255, 255) !important;
+	color: rgb(255, 255, 255);
 	background-color: rgb(50, 0, 100);
 	border-radius: 5px;
 	font-weight: bold;
 }
 
 .link-nav {
-	color: rgb(255, 255, 255) !important;
+	color: rgb(255, 255, 255);
 }
-	
+
 .link-nav:hover {
-	color: rgb(50, 0, 100) !important;
-	background-color: rgb(255, 255, 255) !important;
+	color: rgb(50, 0, 100);
+	background-color: rgb(255, 255, 255);
 	border-radius: 5px;
 	font-weight: bold;
 }
@@ -179,41 +150,41 @@ body::-webkit-scrollbar-thumb:hover {
 	align-items: center;
 }
 
-#tabelaresultados_wrapper {
-	overflow-x: auto;
-	border-radius: 5px;
-	height: calc(auto - 50px);
-	/* Ajustar altura - 50px para outros elementos */
-	width: 100%;
-	max-height: 100%;
-	/* Limitar altura da tabela ao viewport */
-}
+
 
 #tabelaresultados {
-	border-radius: 5px;
-	width: 100%;
-	table-layout: fixed;
+    width: 100%;
+    max-width: 800px; /* Ajuste conforme necessário */
+    border-radius: 5px;
+    table-layout: auto;
 }
 
-#tabelaresultados td {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+.table-container {
+	display: flex;
+	flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-top: 20px; /* Ajuste o padding conforme necessário */
 }
 
 #tabelaresultados th, #tabelaresultados td {
-	height: 30px;
-	padding: 5px;
+    white-space: nowrap; /* Impede a quebra de linha dentro das células */
+    overflow: hidden; /* Oculta o excesso de conteúdo que não cabe na célula */
+    text-overflow: ellipsis; /* Adiciona reticências se o texto for muito longo */
+    padding: 5px; /* Ajusta o padding das células */
+    vertical-align: top; /* Alinha o texto no topo das células */
 }
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+/* Adicione consultas de mídia para responsividade, se necessário */
+@media (max-width: 768px) {
+	.form1, .input-group {
+		flex-direction: column;
+	}
+}
+
+
+
+
+

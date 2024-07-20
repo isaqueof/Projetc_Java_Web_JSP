@@ -1,12 +1,12 @@
 window.addEventListener('load', () => {
     listUsers();
-});
+})
+
 
 function listUsers() {
     const urlAction = document.getElementById('formUser').action;
 
-    $(".alert").alert('dispose')
-    $(".alert").alert('dispose')
+    $(".alert").alert('dispose');
     $.ajax({
         method: "get",
         url: urlAction,
@@ -48,60 +48,65 @@ function listUsers() {
                 ind += '</tr>';
             });
 
-
             $('#tableBody_users').html(ind);
             if ($.fn.DataTable.isDataTable('#tabelaresultados')) {
                 $('#tabelaresultados').DataTable().clear().destroy();
             }
-            $(document).ready(function() {
-                $('#tabelaresultados').DataTable({
-                    language: {
-                        url: '//cdn.datatables.net/plug-ins/2.0.5/i18n/pt-BR.json',
-                    },
-                    layout: {
-                        top: {
-                            buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-                        }
-                    },
-                    responsive: true,
-                    columnDefs: [
-                        { className: "text-center", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
-                        { responsivePriority: 1, targets: 0 , visible: false}, // ID - Maior prioridade
-                        { responsivePriority: 2, targets: 1 }, // Centro de Custo
-                        { responsivePriority: 3, targets: 2 }, // Função
-                        { responsivePriority: 4, targets: 3 }, // Nome
-                        { responsivePriority: 5, targets: 4 }, // Data nascimento
-                        { responsivePriority: 6, targets: 5 }, // CPF
-                        { responsivePriority: 7, targets: 6 }, // RG
-                        { responsivePriority: 8, targets: 7 }, // ASO
-                        { responsivePriority: 9, targets: 8 }, // Data ASO
-                        { responsivePriority: 10, targets: 9 }, // Editar
-                        { responsivePriority: 11, targets: 10 }, // Arquivos
-                        { responsivePriority: 12, targets: 11 } // Deletar
-                    ],
-                    columns: [
-                        { title: 'ID', width: 'auto' },
-                        { title: 'Centro de Custo', width: 'auto' },
-                        { title: 'Função', width: 'auto' },
-                        { title: 'Nome', width: 'auto' },
-                        { title: 'Data nascimento', width: 'auto' },
-                        { title: 'Cpf', width: 'auto' },
-                        { title: 'Rg', width: 'auto' },
-                        { title: 'Aso', width: 'auto' },
-                        { title: 'Data Aso', width: 'auto' },
-                        { title: 'Editar', width: 'auto' },
-                        { title: 'Arquivos', width: 'auto' },
-                        { title: 'Deletar', width: 'auto' }
-                    ]
-                });
-            });
-        }
+			$(document).ready(function() {
+				
+			    $('#tabelaresultados').DataTable({
+			        language: {
+			            url: '//cdn.datatables.net/plug-ins/2.0.5/i18n/pt-BR.json',
+			        },
+			        dom: 'Bfrtip',
+			        buttons: [
+			            'copy', 'csv', 'excel', 'pdf', 'print'
+			        ],
+			        scrollX: false,
+			        autoWidth: false,
+			        responsive: false,
+			        columnDefs: [
+			            { className: "text-center", targets: '_all' },
+			            { responsivePriority: 1, targets: 0, visible: false },
+			            { responsivePriority: 2, targets: 1 },
+			            { responsivePriority: 3, targets: 2 },
+			            { responsivePriority: 4, targets: 3 },
+			            { responsivePriority: 5, targets: 4 },
+			            { responsivePriority: 6, targets: 5 },
+			            { responsivePriority: 7, targets: 6 },
+			            { responsivePriority: 8, targets: 7 },
+			            { responsivePriority: 9, targets: 8 },
+			            { responsivePriority: 10, targets: 9 },
+			            { responsivePriority: 11, targets: 10 },
+			            { responsivePriority: 12, targets: 11 }
+			        ],
+			        columns: [
+			            { title: 'ID' },
+			            { title: 'Centro de Custo' },
+			            { title: 'Função' },
+			            { title: 'Nome' },
+			            { title: 'Data nascimento' },
+			            { title: 'Cpf' },
+			            { title: 'Rg' },
+			            { title: 'Aso' },
+			            { title: 'Data Aso' },
+			            { title: 'Editar' },
+			            { title: 'Arquivos' },
+			            { title: 'Deletar' }
+			        ]
+			    });
+			});
 
+        }
     }).fail(function(xhr, status, errorThrown) {
         alert('Erro ao buscar usuário por nome: ' + xhr.responseText + '\n================================' + errorThrown + '================================' + status);
     });
 }
 
+
+
+
+   
 
 function gravarCadastro() {
 	// Coletar os valores dos campos do formulário

@@ -53,17 +53,13 @@
 	</div>
 
 
-	<div class="lista ">
-
-		<form class="form-material" action="ServeletCadastro" method="post"
-			id="formUser">
+	<div class="lista">
+		<form class="form-material" action="ServeletCadastro" method="post" id="formUser">
 			<input type="hidden" name="acao" id="acao" value="">
 			<div class="container my-4">
 				<div class="row">
-					<div id="resultadoMsg"
-						class="table-responsive divTable col-sm-12 col-md-12 col-lg-12 col-xl-12 table-content">
-						<table id="tabelaresultados"
-							class="table table-striped table-sm align-middle table-borded table-dark table-striped table-hover">
+					<div id="resultadoMsg" class="table-container col-sm-12 col-md-12 col-lg-12 col-xl-12">
+						<table id="tabelaresultados" class="display table table-striped table-sm align-middle table-bordered table-dark table-striped table-hover" style="width: 100%;">
 							<thead>
 								<tr>
 									<th scope="col" style="display: none;">Id</th>
@@ -78,12 +74,10 @@
 									<th scope="col">Editar</th>
 									<th scope="col">Arquivos</th>
 									<th scope="col">Deletar</th>
-
 								</tr>
 							</thead>
 							<tbody id="tableBody_users">
-
-
+								<!-- Data rows will be inserted here by JavaScript -->
 							</tbody>
 						</table>
 					</div>
