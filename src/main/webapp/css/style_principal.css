@@ -175,6 +175,11 @@ body::-webkit-scrollbar-thumb:hover {
     vertical-align: top; /* Alinha o texto no topo das células */
 }
 
+.form-control {
+	
+	width: 150px;
+	
+}
 
 
 /* Adicione consultas de mídia para responsividade, se necessário */
