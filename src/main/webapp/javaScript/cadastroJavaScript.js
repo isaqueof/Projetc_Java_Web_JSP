@@ -259,64 +259,64 @@ $(document).on('change', 'input[type="file"]', function() {
 		});
 		
 
-function editarLinha(id) {
-    let tabela = $('#tabelaresultados').DataTable();
-    let linha = tabela.row(function(idx, data, node) {
-        return data[0] === id ? true : false;
-    });
+		function editarLinha(id) {
+		    let tabela = $('#tabelaresultados').DataTable();
+		    let linha = tabela.row(function(idx, data, node) {
+		        return data[0] === id ? true : false;
+		    });
 
-    linha.nodes().to$().find('td').each(function() {
-        let celula = $(this);
-        let valor = celula.text();
-        celula.empty().append($('<input type="text" class="form-control input-edit" />').val(valor));
-    });
+		    linha.nodes().to$().find('td[data-field]').each(function() {
+		        let celula = $(this);
+		        let valor = celula.text();
+		        celula.empty().append($('<input type="text" class="form-control input-edit" />').val(valor));
+		    });
 
-    linha.nodes().to$().find('button[onclick^="editarLinha"]').attr('onclick', 'salvarLinha(' + id + ')');
-}
+		    linha.nodes().to$().find('button[onclick^="editarLinha"]').attr('onclick', 'salvarLinha(' + id + ')');
+		}
 
-$(document).ready(function() {
-    let clicks = 0;
-    let timeout;
+		$(document).ready(function() {
+		    let clicks = 0;
+		    let timeout;
 
-    $("#tabelaresultados").on("click", ".editar-btn", function() {
-        let linha = $(this).closest("tr");
-        linha.find("td[data-field]").each(function() {
-            let valor = $(this).text();
-            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
-        });
-        linha.find(".editar-btn").hide();
-        linha.find(".salvar-btn").show();
-    });
+		    $("#tabelaresultados").on("click", ".editar-btn", function() {
+		        let linha = $(this).closest("tr");
+		        linha.find("td[data-field]").each(function() {
+		            let valor = $(this).text();
+		            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
+		        });
+		        linha.find(".editar-btn").hide();
+		        linha.find(".salvar-btn").show();
+		    });
 
-    $("#tabelaresultados").on("click", ".salvar-btn", function() {
-        let linha = $(this).closest("tr");
-        linha.find("td[data-field] input").each(function() {
-            let novoValor = $(this).val();
-            $(this).parent().text(novoValor);
-        });
-        linha.find(".salvar-btn").hide();
-        linha.find(".editar-btn").show();
+		    $("#tabelaresultados").on("click", ".salvar-btn", function() {
+		        let linha = $(this).closest("tr");
+		        linha.find("td[data-field] input").each(function() {
+		            let novoValor = $(this).val();
+		            $(this).parent().text(novoValor);
+		        });
+		        linha.find(".salvar-btn").hide();
+		        linha.find(".editar-btn").show();
 
-        let id = linha.attr('id').split('-')[1];
-        //salvarLinha(id);
-    });
+		        let id = linha.attr('id').split('-')[1];
+		        // salvarLinha(id);
+		    });
 
-    $("#tableBody_users").on("click", "td[data-field]", function() {
-        clicks++;
-        if (clicks === 1) {
-            timeout = setTimeout(function() {
-                clicks = 0;
-            }, 300);
-        } else {
-            clearTimeout(timeout);
-            clicks = 0;
-            let valor = $(this).text();
-            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
-            $(this).closest("tr").find(".editar-btn").hide();
-            $(this).closest("tr").find(".salvar-btn").show();
-        }
-    });
-});
+		    $("#tabelaresultados").on("click", "td[data-field]", function() {
+		        clicks++;
+		        if (clicks === 1) {
+		            timeout = setTimeout(function() {
+		                clicks = 0;
+		            }, 300);
+		        } else {
+		            clearTimeout(timeout);
+		            clicks = 0;
+		            let valor = $(this).text();
+		            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
+		            $(this).closest("tr").find(".editar-btn").hide();
+		            $(this).closest("tr").find(".salvar-btn").show();
+		        }
+		    });
+		});
 
 
 function removerLinhaPorId(id, selector) {
