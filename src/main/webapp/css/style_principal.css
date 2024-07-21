@@ -3,9 +3,9 @@
 body {
 	margin: 0;
 	padding: 0;
-	height: 100%;
+	height: auto;
 	width: 100%;
-	overflow: hidden;
+	overflow: auto;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -58,6 +58,7 @@ body::-webkit-scrollbar-thumb:hover {
 	justify-content: start;
 	padding: 40px;
 	width: 100%;
+	
 }
 
 .logout {
@@ -68,8 +69,17 @@ body::-webkit-scrollbar-thumb:hover {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding-top: 100px;
-	width: 100%;
+	position: fixed;
+            top: 100px;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Garante que o menu fique acima de outros elementos */
+}
+
+/* Defina uma altura mínima para o contêiner da tabela */
+.container {
+    min-height: 100vh; /* Define a altura mínima do contêiner para ocupar a altura total da viewport */
+    box-sizing: border-box; /* Inclui padding e bordas na altura total */
 }
 
 .input-group {
@@ -85,9 +95,12 @@ body::-webkit-scrollbar-thumb:hover {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	padding-top: 150px;
 }
 
 .table {
+	width: 100%;
+    table-layout: fixed; /* Garante que as colunas não ultrapassem o contêiner */
 	padding: 10px;
 	border-radius: 10px;
 	overflow: hidden;
@@ -157,6 +170,7 @@ body::-webkit-scrollbar-thumb:hover {
     max-width: 800px; /* Ajuste conforme necessário */
     border-radius: 5px;
     table-layout: auto;
+    overflow-x: auto; /* Habilita rolagem horizontal se necessário */
 }
 
 .table-container {
@@ -167,6 +181,11 @@ body::-webkit-scrollbar-thumb:hover {
     padding-top: 20px; /* Ajuste o padding conforme necessário */
 }
 
+.dataTables_wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
 #tabelaresultados th, #tabelaresultados td {
     white-space: nowrap; /* Impede a quebra de linha dentro das células */
     overflow: hidden; /* Oculta o excesso de conteúdo que não cabe na célula */
@@ -175,11 +194,15 @@ body::-webkit-scrollbar-thumb:hover {
     vertical-align: top; /* Alinha o texto no topo das células */
 }
 
-.form-control {
-	
-	width: 150px;
-	
+.input-edit {
+    width: auto; /* Define a largura do campo de entrada */
+    height: auto; /* Define a altura do campo de entrada */
+    font-size: 14px; /* Define o tamanho do texto */
+    padding: 4px; /* Ajusta o padding do campo de entrada */
+    border: 1px solid #ddd; /* Define a borda do campo de entrada */
+    border-radius: 4px; /* Define o arredondamento das bordas */
 }
+
 
 
 /* Adicione consultas de mídia para responsividade, se necessário */

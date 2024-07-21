@@ -29,10 +29,6 @@
 <link rel="stylesheet"
 	href="https://editor.datatables.net/extensions/Editor/css/editor.bootstrap.css">
 
-<!-- Script -->
-
-
-
 </head>
 
 <body>
@@ -87,86 +83,60 @@
 	</div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="exampleModal" tabindex="-1"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">CADASTRO</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">CADASTRO</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-material row g-3" action="ServeletCadastro" method="post" id="formUser">
+                    <input type="hidden" name="acao" id="acao" value="salvaAjax">
 
-					<form class="form-material row g-3" action="ServeletCadastro"
-						method="post" id="formUser">
-						<input type="hidden" name="acao" id="acao" value="salvaAjax">
-
-
-						<div class="col-md-6">
-							<label for="inputAddress" class="form-label">Centro de
-								custo</label> <input type="text" class="form-control"
-								name="centrodecusto" id="centrodecusto"
-								value="${ modolCadastro.centrodecusto }">
-						</div>
-
-						<div class="col-md-6">
-							<label for="inputtext" class="form-label">Função</label> <input
-								type="text" class="form-control" name="funcao" id="funcao"
-								value="${ modolCadastro.funcao }">
-						</div>
-
-
-						<div class="col-12">
-							<label for="inputtext" class="form-label">Nome</label> <input
-								type="text" class="form-control" name="nome" id="nome"
-								value="${ modolCadastro.nome }">
-						</div>
-
-						<div class="col-md-6">
-							<label for="inputtext" class="form-label">Data nascimento</label>
-							<input type="text" class="form-control" name="datanascimento"
-								id="datanascimento" value="${ modolCadastro.datanascimento }">
-						</div>
-
-
-						<div class="col-md-6">
-							<label for="inputtext" class="form-label">Cpf</label> <input
-								type="text" class="form-control" name="cpf" id="cpf"
-								value="${ modolCadastro.cpf }">
-						</div>
-
-						<div class="col-md-6">
-							<label for="inputtext" class="form-label">Rg</label> <input
-								type="text" class="form-control" name="rg" id="rg"
-								value="${ modolCadastro.rg }">
-						</div>
-
-						<div class="col-md-6">
-							<label for="inputtext" class="form-label">Aso</label> <input
-								type="text" class="form-control" name="aso" id="aso"
-								value="${ modolCadastro.aso }">
-						</div>
-
-						<div class="col-md-6">
-							<label for="inputtext" class="form-label">Data aso</label> <input
-								type="text" class="form-control" name="dataaso" id="dataaso"
-								value="${ modolCadastro.dataaso }">
-						</div>
-
-						<div class="col-12 modal-footer">
-							<button type="button" class="btn btn-secondary"
-								data-bs-dismiss="modal">Fechar</button>
-							<button type="button" onclick="gravarCadastro()"
-								class="btn btn-primary" id="salvarBtn">Salvar</button>
-						</div>
-
-
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+                    <!-- Campos do formulário -->
+                    <div class="col-md-6">
+                        <label for="centrodecusto" class="form-label">Centro de custo</label>
+                        <input type="text" class="form-control" name="centrodecusto" id="centrodecusto">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="funcao" class="form-label">Função</label>
+                        <input type="text" class="form-control" name="funcao" id="funcao">
+                    </div>
+                    <div class="col-12">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input type="text" class="form-control" name="nome" id="nome">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="datanascimento" class="form-label">Data nascimento</label>
+                        <input type="text" class="form-control" name="datanascimento" id="datanascimento">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="cpf" class="form-label">Cpf</label>
+                        <input type="text" class="form-control" name="cpf" id="cpf">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="rg" class="form-label">Rg</label>
+                        <input type="text" class="form-control" name="rg" id="rg">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="aso" class="form-label">Aso</label>
+                        <input type="text" class="form-control" name="aso" id="aso">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="dataaso" class="form-label">Data aso</label>
+                        <input type="text" class="form-control" name="dataaso" id="dataaso">
+                    </div>
+                    <div class="col-12 modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" id="salvarBtn" onclick="gravarCadastro()">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+	
 
 
 

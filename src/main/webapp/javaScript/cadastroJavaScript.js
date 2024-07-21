@@ -53,15 +53,13 @@ function listUsers() {
                 $('#tabelaresultados').DataTable().clear().destroy();
             }
 			$(document).ready(function() {
-				
 			    $('#tabelaresultados').DataTable({
 			        language: {
 			            url: '//cdn.datatables.net/plug-ins/2.0.5/i18n/pt-BR.json',
-			        },
-			        dom: 'Bfrtip',
-			        buttons: [
-			            'copy', 'csv', 'excel', 'pdf', 'print'
-			        ],
+			        },			
+					"lengthMenu": [10, 25, 50, 100], // Opções de itens por página
+					        "pageLength": 10, // Valor padrão de itens por página	
+			        "dom": '<"top"B> <"top"f> <"top"l>rt<"bottom"ip><"clear">',				
 			        scrollX: false,
 			        autoWidth: false,
 			        responsive: false,
@@ -95,7 +93,8 @@ function listUsers() {
 			            { title: 'Deletar' }
 			        ]
 			    });
-			});
+			})
+
 
         }
     }).fail(function(xhr, status, errorThrown) {
@@ -104,47 +103,87 @@ function listUsers() {
 }
 
 
+function limparFormulario() {
+    $('#centrodecusto').val('');
+    $('#funcao').val('');
+    $('#nome').val('');
+    $('#datanascimento').val('');
+    $('#cpf').val('');
+    $('#rg').val('');
+    $('#aso').val('');
+    $('#dataaso').val('');
+    // Adicione outros campos conforme necessário
+}
 
+function fecharModalELimparFormulario() {
+    // Fechar o modal
+    $('#exampleModal').modal('hide');
 
-   
+    // Limpar o formulário
+    $('#formUser').trigger('reset'); // Limpa todos os campos do formulário
+}
+
+// Evento de exibição do modal
+$('#exampleModal').on('shown.bs.modal', function() {
+	limparFormulario();
+    setTimeout(function() {
+        limparFormulario();
+    }, 100); // Ajuste o tempo conforme necessário
+});
+
+// Evento para garantir que o modal seja reaberto corretamente
+$('#exampleModal').on('hidden.bs.modal', function () {
+    // Garantir que o modal-backdrop seja removido
+    $('.modal-backdrop').remove();
+    // Limpar o formulário
+    limparFormulario();
+});
+
+function validarFormulario() {
+    // Adicione suas validações aqui
+    // Exemplo: Verificar se o nome está preenchido
+    if ($('#nome').val().trim() === '') {
+        alert('O nome é obrigatório!');
+        return false;
+    }
+    return true;
+}
 
 function gravarCadastro() {
-	// Coletar os valores dos campos do formulário
-	const formData = {
-		centrodecusto: $('#centrodecusto').val(),
-		funcao: $('#funcao').val(),
-		nome: $('#nome').val(),
-		datanascimento: $('#datanascimento').val(),
-		cpf: $('#cpf').val(),
-		rg: $('#rg').val(),
-		aso: $('#aso').val(),
-		dataaso: $('#dataaso').val(),
-		acao: "salvaAjax" // Adiciona o parâmetro acao com o valor salvaAjax
-		// Adicione outros campos conforme necessário
-	};
-    var urlAction = document.getElementById('formUser').action;
-	// Enviar os dados para a servlet via AJAX
-	$.ajax({
-		method: "POST",
-		url: urlAction,
-		data: formData,
-		success: function(response) {
-			// Exibir mensagem de sucesso ou tomar outras ações necessárias
-			alert('Cadastro realizado com sucesso!');
-			// Recarregar o DataTable após o cadastro ser realizado com sucesso
-			if ($.fn.DataTable.isDataTable('#tabelaresultados')) {
-				$('#tabelaresultados').DataTable().clear().destroy();
-				listUsers();
+    if (!validarFormulario()) return;
 
-			}
-		},
-		error: function(xhr, status, errorThrown) {
-			// Exibir mensagem de erro ou tomar outras ações necessárias
-			alert('Ocorreu um erro ao cadastrar: ' + xhr.responseText);
-		}
-	});
-	fecharModalELimparFormulario();
+    // Coletar os valores dos campos do formulário
+    const formData = {
+        centrodecusto: $('#centrodecusto').val(),
+        funcao: $('#funcao').val(),
+        nome: $('#nome').val(),
+        datanascimento: $('#datanascimento').val(),
+        cpf: $('#cpf').val(),
+        rg: $('#rg').val(),
+        aso: $('#aso').val(),
+        dataaso: $('#dataaso').val(),
+        acao: "salvaAjax"
+    };
+    var urlAction = document.getElementById('formUser').action;
+
+    $.ajax({
+        method: "POST",
+        url: urlAction,
+        data: formData,
+        success: function(response) {
+            alert('Cadastro realizado com sucesso!');
+            if ($.fn.DataTable.isDataTable('#tabelaresultados')) {
+                $('#tabelaresultados').DataTable().clear().destroy();
+                listUsers();
+            }
+            fecharModalELimparFormulario();
+        },
+        error: function(xhr, status, errorThrown) {
+            alert('Ocorreu um erro ao cadastrar: ' + xhr.responseText);
+        }
+    });
 }
+
 
 function salvarLinha(id) {
             var urlAction = document.getElementById('formUser').action;
@@ -185,8 +224,9 @@ function salvarLinha(id) {
                 }
             });
         }
+		
 
-        function uploadPdf(id) {
+function uploadPdf(id) {
             var fileInput = document.getElementById('uploadPdf-' + id);
             var file = fileInput.files[0];
             var formData = new FormData();
@@ -210,96 +250,74 @@ function salvarLinha(id) {
                     alert('Erro ao fazer upload do arquivo: ' + xhr.responseText);
                 }
             });
-        }
+}
 
-
-        $(document).on('change', 'input[type="file"]', function() {
+//UPLOAD PDF
+$(document).on('change', 'input[type="file"]', function() {
             var id = $(this).attr('id').split('-')[1];
             uploadPdf(id);
-        });
-
-
-// Função para fechar o modal e limpar o formulário
-function fecharModalELimparFormulario() {
-	// Fechar o modal
-	$('#exampleModal').modal('hide');
-
-	// Remover a classe que mantém o modal aberto
-	$('body').removeClass('modal-open');
-
-	// Remover o backdrop do modal
-	$('.modal-backdrop').remove();
-
-	// Limpar o formulário
-	$('#formUser')[0].reset(); // Isso irá limpar todos os campos do formulário
-}
-
-// Evento de exibição do modal
-$('#exampleModal').on('shown.bs.modal', function() {
-	// Limpar o formulário
-	$('#formUser')[0].reset();
-});
-
+		});
+		
 
 function editarLinha(id) {
-	let tabela = $('#tabelaresultados').DataTable();
-	let linha = tabela.row(function(idx, data, node) {
-		return data[0] === id ? true : false;
-	});
+    let tabela = $('#tabelaresultados').DataTable();
+    let linha = tabela.row(function(idx, data, node) {
+        return data[0] === id ? true : false;
+    });
 
-	linha.nodes().to$().find('td').each(function() {
-		let celula = $(this);
-		let valor = celula.text();
-		celula.empty().append($('<input type="text" class="form-control" />').val(valor));
-	});
+    linha.nodes().to$().find('td').each(function() {
+        let celula = $(this);
+        let valor = celula.text();
+        celula.empty().append($('<input type="text" class="form-control input-edit" />').val(valor));
+    });
 
-	linha.nodes().to$().find('button[onclick^="editarLinha"]').attr('onclick', 'salvarLinha(' + id + ')');
-
+    linha.nodes().to$().find('button[onclick^="editarLinha"]').attr('onclick', 'salvarLinha(' + id + ')');
 }
 
-        $(document).ready(function() {
-            let clicks = 0;
-            let timeout;
+$(document).ready(function() {
+    let clicks = 0;
+    let timeout;
 
-            $("#tabelaresultados").on("click", ".editar-btn", function() {
-                let linha = $(this).closest("tr");
-                linha.find("td[data-field]").each(function() {
-                    let valor = $(this).text();
-                    $(this).html('<input type="text" class="form-control" value="' + valor + '">');
-                });
-                linha.find(".editar-btn").hide();
-                linha.find(".salvar-btn").show();
-            });
-
-            $("#tabelaresultados").on("click", ".salvar-btn", function() {
-                let linha = $(this).closest("tr");
-                linha.find("td[data-field] input").each(function() {
-                    let novoValor = $(this).val();
-                    $(this).parent().text(novoValor);
-                });
-                linha.find(".salvar-btn").hide();
-                linha.find(".editar-btn").show();
-
-                let id = linha.attr('id').split('-')[1];
-                //salvarLinha(id);
-            });
-
-            $("#tableBody_users").on("click", "td[data-field]", function() {
-                clicks++;
-                if (clicks === 1) {
-                    timeout = setTimeout(function() {
-                        clicks = 0;
-                    }, 300);
-                } else {
-                    clearTimeout(timeout);
-                    clicks = 0;
-                    let valor = $(this).text();
-                    $(this).html('<input type="text" class="form-control" value="' + valor + '">');
-                    $(this).closest("tr").find(".editar-btn").hide();
-                    $(this).closest("tr").find(".salvar-btn").show();
-                }
-            });
+    $("#tabelaresultados").on("click", ".editar-btn", function() {
+        let linha = $(this).closest("tr");
+        linha.find("td[data-field]").each(function() {
+            let valor = $(this).text();
+            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
         });
+        linha.find(".editar-btn").hide();
+        linha.find(".salvar-btn").show();
+    });
+
+    $("#tabelaresultados").on("click", ".salvar-btn", function() {
+        let linha = $(this).closest("tr");
+        linha.find("td[data-field] input").each(function() {
+            let novoValor = $(this).val();
+            $(this).parent().text(novoValor);
+        });
+        linha.find(".salvar-btn").hide();
+        linha.find(".editar-btn").show();
+
+        let id = linha.attr('id').split('-')[1];
+        //salvarLinha(id);
+    });
+
+    $("#tableBody_users").on("click", "td[data-field]", function() {
+        clicks++;
+        if (clicks === 1) {
+            timeout = setTimeout(function() {
+                clicks = 0;
+            }, 300);
+        } else {
+            clearTimeout(timeout);
+            clicks = 0;
+            let valor = $(this).text();
+            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
+            $(this).closest("tr").find(".editar-btn").hide();
+            $(this).closest("tr").find(".salvar-btn").show();
+        }
+    });
+});
+
 
 function removerLinhaPorId(id, selector) {
 	// Obtenha a instância da DataTable
