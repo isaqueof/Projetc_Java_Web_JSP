@@ -42,9 +42,9 @@ function listUsers() {
 				// Adiciona o campo de upload e o link para o PDF
 
 				ind += '<td>';
-				ind += `<input type="file" class="form-control" id="uploadPdf-${user.id}" accept=".pdf" style="display:none;" onchange="uploadPdf(${user.id})">`;
+				ind += `<input type="file" name="file" class="form-control" id="uploadPdf-${user.id}" accept=".pdf" style="display:none;" onchange="uploadPdf(${user.id})">`;
 				ind += `<button type="button" class="btn btn-sm btn-secondary" onclick="document.getElementById('uploadPdf-${user.id}').click()">Upload PDF</button>`;
-				ind += '<a href="#" class="btn btn-info btn-sm pdf-link" id="pdf-link-${user.id}" target="_blank">Visualizar PDF</a>';
+				ind += '<a href="' + user.pdfPath + '" class="btn btn-info btn-sm pdf-link" id="pdf-link-' + user.id + '" target="_blank">Visualizar PDF</a>';
 				ind += '</td>';
 
 
@@ -267,7 +267,50 @@ $(document).ready(function() {
 });
 
 // Aqui está a função 'uploadPdf' ajustada com verificações adicionais
+
 function uploadPdf(id) {
+    var fileInput = document.getElementById('uploadPdf-' + id);
+    if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+        console.error('Arquivo não selecionado ou input file não encontrado.');
+        return;
+    }
+
+    var file = fileInput.files[0];
+    var formData = new FormData();
+    formData.append("file", file);
+    formData.append("acao", "uploadPdf");
+    formData.append("id", id);
+
+    console.log("uploadPdf chamado para o ID: " + id);
+    console.log("Arquivo selecionado: " + file.name);
+
+    $.ajax({
+        url: document.getElementById('formUser').action,
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            console.log("Upload bem-sucedido: " + response);
+
+            // Atualiza o link do PDF
+            var linkElement = document.getElementById('pdf-link-' + id);
+            if (linkElement) {
+                linkElement.href = response; // Ajuste conforme necessário
+                linkElement.style.display = 'inline-block'; // Exibe o link se estiver oculto
+                linkElement.innerText = 'Visualizar PDF';
+            } else {
+                console.error('Elemento do link não encontrado.');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Erro ao fazer upload: " + xhr.responseText);
+        }
+    });
+}
+
+
+/*function uploadPdf(id) {
 	var fileInput = document.getElementById('uploadPdf-' + id);
 	if (!fileInput || !fileInput.files || !fileInput.files[0]) {
 		console.error('Arquivo não selecionado ou input file não encontrado.');
@@ -295,7 +338,7 @@ function uploadPdf(id) {
 			// Atualiza o link do PDF
 			var linkElement = document.getElementById('pdf-link-' + id);
 			if (linkElement) {
-				linkElement.href = "/uploads/" + response; // Ajuste conforme necessário
+				linkElement.href = response; // Ajuste conforme necessário
 				linkElement.style.display = 'inline-block'; // Exibe o link se estiver oculto
 				linkElement.innerText = 'Visualizar PDF';
 			} else {
@@ -306,7 +349,7 @@ function uploadPdf(id) {
 			console.error("Erro ao fazer upload: " + xhr.responseText);
 		}
 	});
-}
+}*/
 
 
 // Aqui está a função 'openUploadDialog' ajustada com verificações adicionais
@@ -327,6 +370,52 @@ $(document).on('change', 'input[type="file"]', function() {
 	console.log('Arquivo selecionado para o ID:', id);
 	uploadPdf(id);
 });
+
+
+
+function buscarCadastroAjax() {
+    $.ajax({
+        url: 'ServeletCadastro?acao=buscarcadastroajax',
+        type: 'GET',
+        success: function(response) {
+            var users = JSON.parse(response);
+            var tableBody = document.getElementById('tableBody_users');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            users.forEach(function(user) {
+                var row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td style="display: none;">${user.id}</td>
+                    <td>${user.centrodecusto}</td>
+                    <td>${user.funcao}</td>
+                    <td>${user.nome}</td>
+                    <td>${user.datanascimento}</td>
+                    <td>${user.cpf}</td>
+                    <td>${user.rg}</td>
+                    <td>${user.aso}</td>
+                    <td>${user.dataaso}</td>
+                    <td><button class="btn btn-warning btn-sm" onclick="editUser(${user.id})">Editar</button></td>
+                    <td><input type="file" id="uploadPdf-${user.id}" style="display:none;" onchange="uploadPdf(${user.id})">
+                        <label for="uploadPdf-${user.id}" class="btn btn-info btn-sm">Upload PDF</label>
+                        <a href="${user.filePath ? user.filePath : '#'}" class="btn btn-info btn-sm pdf-link" id="pdf-link-${user.id}" target="_blank" ${user.filePath ? '' : 'style="display:none;"'}>Visualizar PDF</a>
+                    </td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deletarUsuario(${user.id})">Deletar</button></td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error("Erro ao buscar cadastros: " + xhr.responseText);
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    buscarCadastroAjax(); // Chama a função para carregar os dados quando a página for carregada
+});
+
 
 
 

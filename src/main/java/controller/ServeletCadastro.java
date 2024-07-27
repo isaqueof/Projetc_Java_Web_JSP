@@ -2,7 +2,6 @@ package controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.DAOcadastro;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -108,7 +107,12 @@ public class ServeletCadastro extends HttpServlet {
 	        response.getWriter().write("Erro ao processar a solicitação: " + e.getMessage());
 	    }
 	}
+	
+	
+	
 
+
+	
 	private void handleFileUpload(HttpServletRequest request, HttpServletResponse response)
 	        throws IOException, ServletException, SQLException {
 	    Part filePart = request.getPart("file");
@@ -118,11 +122,64 @@ public class ServeletCadastro extends HttpServlet {
 	        String uploadDir = getServletContext().getRealPath("/uploads/");
 	        Path uploadPath = Paths.get(uploadDir);
 
+	        // Verificar e criar o diretório de upload se não existir
+	        if (!Files.exists(uploadPath)) {
+	            Files.createDirectories(uploadPath);
+	            LOGGER.info("Diretório de upload criado: " + uploadPath.toString());
+	        } else {
+	            LOGGER.info("Diretório de upload já existe: " + uploadPath.toString());
+	        }
+
+	        String relativeFilePath = "/uploads/" + System.currentTimeMillis() + "_" + fileName;
+	        String absoluteFilePath = uploadPath.resolve(System.currentTimeMillis() + "_" + fileName).toString();
+
+	        try (InputStream fileContent = filePart.getInputStream()) {
+	            Files.copy(fileContent, Paths.get(absoluteFilePath), StandardCopyOption.REPLACE_EXISTING);
+	            LOGGER.info("Arquivo salvo em: " + absoluteFilePath);
+	        } catch (IOException e) {
+	            LOGGER.log(Level.SEVERE, "Erro ao salvar o arquivo", e);
+	            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	            response.getWriter().print("Erro ao salvar o arquivo.");
+	            return;
+	        }
+
+	        LOGGER.info("Caminho relativo salvo: " + relativeFilePath);
+
+	        String id = request.getParameter("id");
+	        ModelCadastro modelCadastro = daoCadastro.buscarCadastroPorId(Long.parseLong(id));
+	        modelCadastro.setFilePath(relativeFilePath); // Armazene o caminho relativo
+	        daoCadastro.gravarCadastro(modelCadastro);
+	        LOGGER.info("Caminho salvo no banco de dados: " + relativeFilePath);
+
+	        response.getWriter().write(relativeFilePath);
+	    } else {
+	        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	        response.getWriter().print("Nenhum arquivo foi enviado.");
+	    }
+	}
+
+	
+	
+	/*private void handleFileUpload(HttpServletRequest request, HttpServletResponse response)
+	        throws IOException, ServletException, SQLException {
+	    Part filePart = request.getPart("file");
+
+	    if (filePart != null && filePart.getSize() > 0) {
+	        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+	        String uploadDir = getServletContext().getRealPath("/uploads");
+	        Path uploadPath = Paths.get(uploadDir);
+	        
+	        
+
 	        if (!Files.exists(uploadPath)) {
 	            Files.createDirectories(uploadPath);
 	        }
+	        
+	        
 
 	        String filePath = Paths.get(uploadDir, System.currentTimeMillis() + "_" + fileName).toString();
+	       
+	        System.out.println("Diretório de upload absoluto: " + uploadDir);
 
 	        try (InputStream fileContent = filePart.getInputStream()) {
 	            Files.copy(fileContent, Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
@@ -140,7 +197,7 @@ public class ServeletCadastro extends HttpServlet {
 	            daoCadastro.gravarCadastro(modelCadastro);
 
 	            // Correção: Geração da URL acessível publicamente
-	            String fileUrl = request.getContextPath() + "/uploads/" + Paths.get(filePath).getFileName().toString();
+	            String fileUrl = request.getContextPath() + "/uploads" + Paths.get(filePath).getFileName().toString();
 	            response.getWriter().write(fileUrl);
 	        } else {
 	            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -150,8 +207,7 @@ public class ServeletCadastro extends HttpServlet {
 	        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 	        response.getWriter().print("Nenhum arquivo foi enviado.");
 	    }
-	}
-
+	}*/
 
 
 	private void handleFormSubmission(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {

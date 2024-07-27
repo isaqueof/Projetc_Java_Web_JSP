@@ -51,7 +51,7 @@
 
 	<div class="lista">
 		<form class="form-material" action="ServeletCadastro" method="post"
-			id="formUser">
+			id="formUser" enctype="multipart/form-data">
 			<input type="hidden" name="acao" id="acao" value="">
 			<div class="container my-4">
 				<div class="row">
@@ -85,6 +85,7 @@
 			</div>
 		</form>
 	</div>
+
 
 	<!-- Modal -->
 	<div class="modal fade" id="exampleModal" tabindex="-1"
@@ -186,7 +187,7 @@
 	<script src="webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 		crossorigin="anonymous"></script>
-	
+
 
 
 	<script type="text/javascript">
