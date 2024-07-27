@@ -2,41 +2,37 @@ package connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class SingleConnectionBanco {
 
-	private static String banco = "jdbc:postgresql://localhost:5432/progJsp?autoReconnect=true";
-	private static String user = "postgres";
-	private static String senha = "admin";
-	private static Connection connection = null;
+    private static final String URL = "jdbc:postgresql://localhost:5432/progJsp?autoReconnect=true";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "admin";
+    private static Connection connection = null;
 
-	public static Connection getConnection() {
-		return connection;
-	}
+    static {
+        conectar();
+    }
 
-	static {
-		conectar();
-	}
+    private SingleConnectionBanco() {
+        conectar();
+    }
 
-	private SingleConnectionBanco() {
-		conectar();
-	}
+    public static Connection getConnection() {
+        return connection;
+    }
 
-	public static void conectar() {
-
-		try {
-
-			if (connection == null) {
-				Class.forName("org.postgresql.Driver");
-				connection = DriverManager.getConnection(banco, user, senha );
-				connection.setAutoCommit(false);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
+    private static void conectar() {
+        try {
+            if (connection == null || connection.isClosed()) {
+                Class.forName("org.postgresql.Driver");
+                connection = DriverManager.getConnection(URL, USER, PASSWORD);
+                connection.setAutoCommit(false);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao conectar com o banco de dados", e);
+        }
+    }
 }
-

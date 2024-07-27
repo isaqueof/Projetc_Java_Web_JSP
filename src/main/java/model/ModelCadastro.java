@@ -1,110 +1,101 @@
 package model;
 
-import java.io.Serial;
-import java.io.Serializable;
+public class ModelCadastro {
 
-public class ModelCadastro implements Serializable  {
+    private Long id;
+    private String centrodecusto;
+    private String funcao;
+    private String nome;
+    private String datanascimento;
+    private String cpf;
+    private String rg;
+    private String aso;
+    private String dataaso;
+    private String filePath;
 
-	@Serial
-	private static final long serialVersionUID = 1L;
+    // Getters e setters para todos os campos, incluindo filePath
 
-	private Long id;
-	private String centrodecusto;
-	private String funcao;
-	private String nome;
-	private String datanascimento;
-	private String cpf;
-	private String rg;
-	private String aso;
-	private String dataaso;
+    public Long getId() {
+        return id;
+    }
 
-	public boolean isNovo() {
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-		if (this.id == null) {
-			return true;
-		} else if (this.id > 0) {
-			return false;
-		}
-		return false;
-	}
+    public String getCentrodecusto() {
+        return centrodecusto;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public void setCentrodecusto(String centrodecusto) {
+        this.centrodecusto = centrodecusto;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public String getFuncao() {
+        return funcao;
+    }
 
-	public String getCentrodecusto() {
-		return centrodecusto;
-	}
+    public void setFuncao(String funcao) {
+        this.funcao = funcao;
+    }
 
-	public void setCentrodecusto(String centrodecusto) {
-		this.centrodecusto = centrodecusto;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public String getFuncao() {
-		return funcao;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public void setFuncao(String funcao) {
-		this.funcao = funcao;
-	}
+    public String getDatanascimento() {
+        return datanascimento;
+    }
 
-	public String getNome() {
-		return nome;
-	}
+    public void setDatanascimento(String datanascimento) {
+        this.datanascimento = datanascimento;
+    }
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public String getCpf() {
+        return cpf;
+    }
 
-	public String getDatanascimento() {
-		return datanascimento;
-	}
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
 
-	public void setDatanascimento(String datanascimento) {
-		this.datanascimento = datanascimento;
-	}
+    public String getRg() {
+        return rg;
+    }
 
-	public String getCpf() {
-		return cpf;
-	}
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
 
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
+    public String getAso() {
+        return aso;
+    }
 
-	public String getRg() {
-		return rg;
-	}
+    public void setAso(String aso) {
+        this.aso = aso;
+    }
 
-	public void setRg(String rg) {
-		this.rg = rg;
-	}
+    public String getDataaso() {
+        return dataaso;
+    }
 
-	public String getAso() {
-		return aso;
-	}
+    public void setDataaso(String dataaso) {
+        this.dataaso = dataaso;
+    }
 
-	public void setAso(String aso) {
-		this.aso = aso;
-	}
+    public String getFilePath() {
+        return filePath;
+    }
 
-	public String getDataaso() {
-		return dataaso;
-	}
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 
-	public void setDataaso(String dataaso) {
-		this.dataaso = dataaso;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
-	
-	
-
+    public boolean isNovo() {
+        return this.id == null;
+    }
 }

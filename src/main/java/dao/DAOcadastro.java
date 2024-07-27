@@ -18,7 +18,6 @@ public class DAOcadastro {
         connection = SingleConnectionBanco.getConnection();
     }
 
-
     public void gravarCadastro(ModelCadastro objeto) throws SQLException {
         if (objeto.isNovo()) {
             inserirCadastro(objeto);
@@ -28,7 +27,7 @@ public class DAOcadastro {
     }
 
     private void inserirCadastro(ModelCadastro objeto) throws SQLException {
-        String sql = "INSERT INTO cadastro (centrodecusto, funcao, nome, datanascimento, cpf, rg, aso, dataaso) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO cadastro (centrodecusto, funcao, nome, datanascimento, cpf, rg, aso, dataaso, filePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, objeto.getCentrodecusto());
             preparedStatement.setString(2, objeto.getFuncao());
@@ -38,6 +37,7 @@ public class DAOcadastro {
             preparedStatement.setString(6, objeto.getRg());
             preparedStatement.setString(7, objeto.getAso());
             preparedStatement.setString(8, objeto.getDataaso());
+            preparedStatement.setString(9, objeto.getFilePath());
 
             preparedStatement.executeUpdate();
             connection.commit();
@@ -49,7 +49,7 @@ public class DAOcadastro {
     }
 
     private void atualizarCadastro(ModelCadastro objeto) throws SQLException {
-        String sql = "UPDATE cadastro SET centrodecusto=?, funcao=?, nome=?, datanascimento=?, cpf=?, rg=?, aso=?, dataaso=? WHERE id=?";
+        String sql = "UPDATE cadastro SET centrodecusto=?, funcao=?, nome=?, datanascimento=?, cpf=?, rg=?, aso=?, dataaso=?, filePath=? WHERE id=?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, objeto.getCentrodecusto());
             preparedStatement.setString(2, objeto.getFuncao());
@@ -59,10 +59,8 @@ public class DAOcadastro {
             preparedStatement.setString(6, objeto.getRg());
             preparedStatement.setString(7, objeto.getAso());
             preparedStatement.setString(8, objeto.getDataaso());
-            preparedStatement.setLong(9, objeto.getId());
-
-            // Log de depuração
-            System.out.println("Atualizando cadastro: " + objeto.toString());
+            preparedStatement.setString(9, objeto.getFilePath()); // Adiciona o caminho do arquivo
+            preparedStatement.setLong(10, objeto.getId());
 
             int rowsUpdated = preparedStatement.executeUpdate();
             if (rowsUpdated > 0) {
@@ -74,7 +72,6 @@ public class DAOcadastro {
             throw new SQLException("Erro ao atualizar cadastro: " + e.getMessage());
         }
     }
-
 
     public ModelCadastro consultaUsuario(String nome) throws SQLException {
         ModelCadastro model = new ModelCadastro();
@@ -93,6 +90,7 @@ public class DAOcadastro {
                 model.setRg(resultSet.getString("rg"));
                 model.setAso(resultSet.getString("aso"));
                 model.setDataaso(resultSet.getString("dataaso"));
+                model.setFilePath(resultSet.getString("filePath"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -119,6 +117,7 @@ public class DAOcadastro {
                 modelCadastro.setRg(resultado.getString("rg"));
                 modelCadastro.setAso(resultado.getString("aso"));
                 modelCadastro.setDataaso(resultado.getString("dataaso"));
+                modelCadastro.setFilePath(resultado.getString("filePath"));
 
                 retorno.add(modelCadastro);
             }
@@ -141,5 +140,30 @@ public class DAOcadastro {
             e.printStackTrace();
             throw new SQLException("Erro ao deletar cadastro: " + e.getMessage(), e);
         }
+    }
+
+    public ModelCadastro buscarCadastroPorId(long id) throws SQLException {
+        ModelCadastro modelCadastro = null;
+        String sql = "SELECT * FROM cadastro WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    modelCadastro = new ModelCadastro();
+                    modelCadastro.setId(resultSet.getLong("id"));
+                    modelCadastro.setCentrodecusto(resultSet.getString("centrodecusto"));
+                    modelCadastro.setFuncao(resultSet.getString("funcao"));
+                    modelCadastro.setNome(resultSet.getString("nome"));
+                    modelCadastro.setDatanascimento(resultSet.getString("datanascimento"));
+                    modelCadastro.setCpf(resultSet.getString("cpf"));
+                    modelCadastro.setRg(resultSet.getString("rg"));
+                    modelCadastro.setAso(resultSet.getString("aso"));
+                    modelCadastro.setDataaso(resultSet.getString("dataaso"));
+                    modelCadastro.setFilePath(resultSet.getString("filePath")); // Certifique-se de que o nome da coluna está correto
+                }
+            }
+        }
+        return modelCadastro;
     }
 }

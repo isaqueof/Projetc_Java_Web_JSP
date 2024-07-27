@@ -9,8 +9,7 @@
 <!-- Bootstrap CSS -->
 <link href="webjars/bootstrap/5.3.3/css/bootstrap.min.css"
 	rel="stylesheet" />
-<link rel="stylesheet" href="css/style_principal.css">
-
+	<link rel="stylesheet" href="css/style_principal.css">
 <!-- Script -->
 </head>
 <body>
@@ -77,8 +76,5 @@ o
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 		crossorigin="anonymous"></script>
 
-
-	<script type="text/javascript"
-		src="javaScript/script_page_principal.js"></script>
 </body>
 </html>
