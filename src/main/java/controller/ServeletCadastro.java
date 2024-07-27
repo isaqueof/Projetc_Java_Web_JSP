@@ -139,8 +139,9 @@ public class ServeletCadastro extends HttpServlet {
 	            modelCadastro.setFilePath(filePath);
 	            daoCadastro.gravarCadastro(modelCadastro);
 
+	            // Correção: Geração da URL acessível publicamente
 	            String fileUrl = request.getContextPath() + "/uploads/" + Paths.get(filePath).getFileName().toString();
-	            response.getWriter().write("Upload bem-sucedido: " + fileUrl);
+	            response.getWriter().write(fileUrl);
 	        } else {
 	            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 	            response.getWriter().print("Cadastro não encontrado.");
@@ -150,6 +151,8 @@ public class ServeletCadastro extends HttpServlet {
 	        response.getWriter().print("Nenhum arquivo foi enviado.");
 	    }
 	}
+
+
 
 	private void handleFormSubmission(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
 		String id = request.getParameter("id");

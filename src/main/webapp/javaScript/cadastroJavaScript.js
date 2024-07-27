@@ -295,7 +295,7 @@ function uploadPdf(id) {
 			// Atualiza o link do PDF
 			var linkElement = document.getElementById('pdf-link-' + id);
 			if (linkElement) {
-				linkElement.href = "/upload/" + response; // Ajuste conforme necessário
+				linkElement.href = "/uploads/" + response; // Ajuste conforme necessário
 				linkElement.style.display = 'inline-block'; // Exibe o link se estiver oculto
 				linkElement.innerText = 'Visualizar PDF';
 			} else {
