@@ -23,15 +23,15 @@ function listUsers() {
 
 			json.forEach((user, index) => {
 				ind += `<tr id="row-${user.id}">`;
-				ind += `<td style="display: none;">${user.id}</td>`;
-				ind += `<td data-field="centrodecusto">${user.centrodecusto}</td>`;
-				ind += `<td data-field="funcao">${user.funcao}</td>`;
-				ind += `<td data-field="nome">${user.nome}</td>`;
-				ind += `<td data-field="datanascimento">${user.datanascimento}</td>`;
-				ind += `<td data-field="cpf">${user.cpf}</td>`;
-				ind += `<td data-field="rg">${user.rg}</td>`;
-				ind += `<td data-field="aso">${user.aso}</td>`;
-				ind += `<td data-field="dataaso">${user.dataaso}</td>`;
+				ind += `<td style="display: none;" >${user.id}</td>`;
+				ind += `<td data-field="centrodecusto" type="text">${user.centrodecusto}</td>`;
+				ind += `<td data-field="funcao" type="text">${user.funcao}</td>`;
+				ind += `<td data-field="nome" type="text">${user.nome}</td>`;
+				ind += `<td data-field="datanascimento" type="date">${user.datanascimento}</td>`;
+				ind += `<td data-field="cpf" type="text">${user.cpf}</td>`;
+				ind += `<td data-field="rg" type="text">${user.rg}</td>`;
+				ind += `<td data-field="aso" type="text">${user.aso}</td>`;
+				ind += `<td data-field="dataaso" type="date">${user.dataaso}</td>`;
 
 				// Adiciona os botões Editar e Salvar
 				ind += '<td>';
@@ -108,6 +108,32 @@ function listUsers() {
 }
 
 
+document.getElementById('cpf').addEventListener('input', function(e) {
+	var value = e.target.value;
+	var cpfPattern = value.replace(/\D/g, '') // Remove qualquer coisa que não seja número
+		.replace(/(\d{3})(\d)/, '$1.$2') // Adiciona ponto após o terceiro dígito
+		.replace(/(\d{3})(\d)/, '$1.$2') // Adiciona ponto após o sexto dígito
+		.replace(/(\d{3})(\d)/, '$1-$2') // Adiciona traço após o nono dígito
+		.replace(/(-\d{2})\d+?$/, '$1'); // Impede entrada de mais de 11 dígitos
+	e.target.value = cpfPattern;
+})
+
+
+
+
+
+
+
+// Adiciona um evento de input ao seu campo de entrada para ajustar a largura dinamicamente
+document.querySelectorAll('.input-edit').forEach(function(input) {
+	adjustWidthToText(input); // Ajusta a largura inicialmente
+	input.addEventListener('input', function() {
+		adjustWidthToText(input);
+	});
+});
+
+
+
 function limparFormulario() {
 	$('#centrodecusto').val('');
 	$('#funcao').val('');
@@ -155,64 +181,64 @@ function validarFormulario() {
 }
 
 function gravarCadastro() {
-    if (!validarFormulario()) return;
+	if (!validarFormulario()) return;
 
-    // Coleta dos dados do formulário
-    const formData = {
-        centrodecusto: $('#centrodecusto').val(),
-        funcao: $('#funcao').val(),
-        nome: $('#nome').val(),
-        datanascimento: $('#datanascimento').val(),
-        cpf: $('#cpf').val(),
-        rg: $('#rg').val(),
-        aso: $('#aso').val(),
-        dataaso: $('#dataaso').val(),
-        acao: "salvaAjax" // Certifique-se de que este valor é esperado pelo servidor
-    };
+	// Coleta dos dados do formulário
+	const formData = {
+		centrodecusto: $('#centrodecusto').val(),
+		funcao: $('#funcao').val(),
+		nome: $('#nome').val(),
+		datanascimento: $('#datanascimento').val(),
+		cpf: $('#cpf').val(),
+		rg: $('#rg').val(),
+		aso: $('#aso').val(),
+		dataaso: $('#dataaso').val(),
+		acao: "salvaAjax" // Certifique-se de que este valor é esperado pelo servidor
+	};
 
-    console.log("Dados do formulário:", formData); // Adicione esta linha
+	console.log("Dados do formulário:", formData); // Adicione esta linha
 
-    const urlAction = document.getElementById('formUser').action;
+	const urlAction = document.getElementById('formUser').action;
 
-    $.ajax({
-        method: "POST",
-        url: urlAction,
-        data: formData,
-        success: function(response) {
-            console.log("Resposta do servidor:", response); // Adicione esta linha
-            alert('Cadastro realizado com sucesso!');
-            if ($.fn.DataTable.isDataTable('#tabelaresultados')) {
-                $('#tabelaresultados').DataTable().clear().destroy();
-                listUsers();
-            }
-            fecharModalELimparFormulario();
-        },
-        error: function(xhr, status, errorThrown) {
-            console.error('Erro ao cadastrar:', xhr.responseText); // Altere para console.error
-            alert('Ocorreu um erro ao cadastrar: ' + xhr.responseText);
-        }
-    });
+	$.ajax({
+		method: "POST",
+		url: urlAction,
+		data: formData,
+		success: function(response) {
+			console.log("Resposta do servidor:", response); // Adicione esta linha
+			alert('Cadastro realizado com sucesso!');
+			if ($.fn.DataTable.isDataTable('#tabelaresultados')) {
+				$('#tabelaresultados').DataTable().clear().destroy();
+				listUsers();
+			}
+			fecharModalELimparFormulario();
+		},
+		error: function(xhr, status, errorThrown) {
+			console.error('Erro ao cadastrar:', xhr.responseText); // Altere para console.error
+			alert('Ocorreu um erro ao cadastrar: ' + xhr.responseText);
+		}
+	});
 }
 
 
 function saveUser() {
-  const formData = new FormData(document.getElementById('formUser'));
-  formData.append('acao', 'salvaajax');
+	const formData = new FormData(document.getElementById('formUser'));
+	formData.append('acao', 'salvaajax');
 
-  $.ajax({
-    method: 'POST',
-    url: 'ServeletCadastro',
-    data: formData,
-    processData: false,
-    contentType: false,
-    success: function(response) {
-      alert('Cadastro salvo com sucesso!');
-      listUsers();
-    },
-    error: function(xhr, status, errorThrown) {
-      alert('Erro ao salvar cadastro: ' + xhr.responseText);
-    }
-  });
+	$.ajax({
+		method: 'POST',
+		url: 'ServeletCadastro',
+		data: formData,
+		processData: false,
+		contentType: false,
+		success: function(response) {
+			alert('Cadastro salvo com sucesso!');
+			listUsers();
+		},
+		error: function(xhr, status, errorThrown) {
+			alert('Erro ao salvar cadastro: ' + xhr.responseText);
+		}
+	});
 }
 
 
@@ -269,44 +295,44 @@ $(document).ready(function() {
 // Aqui está a função 'uploadPdf' ajustada com verificações adicionais
 
 function uploadPdf(id) {
-    var fileInput = document.getElementById('uploadPdf-' + id);
-    if (!fileInput || !fileInput.files || !fileInput.files[0]) {
-        console.error('Arquivo não selecionado ou input file não encontrado.');
-        return;
-    }
+	var fileInput = document.getElementById('uploadPdf-' + id);
+	if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+		console.error('Arquivo não selecionado ou input file não encontrado.');
+		return;
+	}
 
-    var file = fileInput.files[0];
-    var formData = new FormData();
-    formData.append("file", file);
-    formData.append("acao", "uploadPdf");
-    formData.append("id", id);
+	var file = fileInput.files[0];
+	var formData = new FormData();
+	formData.append("file", file);
+	formData.append("acao", "uploadPdf");
+	formData.append("id", id);
 
-    console.log("uploadPdf chamado para o ID: " + id);
-    console.log("Arquivo selecionado: " + file.name);
+	console.log("uploadPdf chamado para o ID: " + id);
+	console.log("Arquivo selecionado: " + file.name);
 
-    $.ajax({
-        url: document.getElementById('formUser').action,
-        type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            console.log("Upload bem-sucedido: " + response);
+	$.ajax({
+		url: document.getElementById('formUser').action,
+		type: "POST",
+		data: formData,
+		processData: false,
+		contentType: false,
+		success: function(response) {
+			console.log("Upload bem-sucedido: " + response);
 
-            // Atualiza o link do PDF
-            var linkElement = document.getElementById('pdf-link-' + id);
-            if (linkElement) {
-                linkElement.href = response; // Ajuste conforme necessário
-                linkElement.style.display = 'inline-block'; // Exibe o link se estiver oculto
-                linkElement.innerText = 'Visualizar PDF';
-            } else {
-                console.error('Elemento do link não encontrado.');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error("Erro ao fazer upload: " + xhr.responseText);
-        }
-    });
+			// Atualiza o link do PDF
+			var linkElement = document.getElementById('pdf-link-' + id);
+			if (linkElement) {
+				linkElement.href = response; // Ajuste conforme necessário
+				linkElement.style.display = 'inline-block'; // Exibe o link se estiver oculto
+				linkElement.innerText = 'Visualizar PDF';
+			} else {
+				console.error('Elemento do link não encontrado.');
+			}
+		},
+		error: function(xhr, status, error) {
+			console.error("Erro ao fazer upload: " + xhr.responseText);
+		}
+	});
 }
 
 
@@ -374,18 +400,18 @@ $(document).on('change', 'input[type="file"]', function() {
 
 
 function buscarCadastroAjax() {
-    $.ajax({
-        url: 'ServeletCadastro?acao=buscarcadastroajax',
-        type: 'GET',
-        success: function(response) {
-            var users = JSON.parse(response);
-            var tableBody = document.getElementById('tableBody_users');
-            tableBody.innerHTML = ''; // Clear existing rows
+	$.ajax({
+		url: 'ServeletCadastro?acao=buscarcadastroajax',
+		type: 'GET',
+		success: function(response) {
+			var users = JSON.parse(response);
+			var tableBody = document.getElementById('tableBody_users');
+			tableBody.innerHTML = ''; // Clear existing rows
 
-            users.forEach(function(user) {
-                var row = document.createElement('tr');
+			users.forEach(function(user) {
+				var row = document.createElement('tr');
 
-                row.innerHTML = `
+				row.innerHTML = `
                     <td style="display: none;">${user.id}</td>
                     <td>${user.centrodecusto}</td>
                     <td>${user.funcao}</td>
@@ -403,17 +429,17 @@ function buscarCadastroAjax() {
                     <td><button class="btn btn-danger btn-sm" onclick="deletarUsuario(${user.id})">Deletar</button></td>
                 `;
 
-                tableBody.appendChild(row);
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error("Erro ao buscar cadastros: " + xhr.responseText);
-        }
-    });
+				tableBody.appendChild(row);
+			});
+		},
+		error: function(xhr, status, error) {
+			console.error("Erro ao buscar cadastros: " + xhr.responseText);
+		}
+	});
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    buscarCadastroAjax(); // Chama a função para carregar os dados quando a página for carregada
+	buscarCadastroAjax(); // Chama a função para carregar os dados quando a página for carregada
 });
 
 

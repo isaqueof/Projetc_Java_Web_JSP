@@ -195,16 +195,14 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .input-edit {
-    width: 100%; /* O input ocupará 100% da largura da célula */
-    height: auto; /* Ajusta a altura conforme necessário */
-    font-size: 14px; /* Define o tamanho do texto */
-    padding: 4px; /* Ajusta o padding do campo de entrada */
-    border: 1px solid #ddd; /* Define a borda do campo de entrada */
-    border-radius: 4px; /* Define o arredondamento das bordas */
-    box-sizing: border-box; /* Inclui o padding e a borda na largura total */
+    height: auto;
+    font-size: 14px;
+    padding: 4px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: auto; /* Ajusta a largura conforme o texto */
 }
-
-
 
 /* Adicione consultas de mídia para responsividade, se necessário */
 @media (max-width: 768px) {
@@ -212,8 +210,3 @@ body::-webkit-scrollbar-thumb:hover {
 		flex-direction: column;
 	}
 }
-
-
-
-
-

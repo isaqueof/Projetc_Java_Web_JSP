@@ -155,6 +155,7 @@
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="webjars/jquery/3.7.1/jquery.min.js"></script>
+	<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 	<!-- JavaScript (Table) -->
 	<script type="text/javascript" src="javaScript/cadastroJavaScript.js"></script>
 	<script defer

@@ -109,58 +109,10 @@ public class ServeletCadastro extends HttpServlet {
 	}
 	
 	
+
 	
-
-
 	
 	private void handleFileUpload(HttpServletRequest request, HttpServletResponse response)
-	        throws IOException, ServletException, SQLException {
-	    Part filePart = request.getPart("file");
-
-	    if (filePart != null && filePart.getSize() > 0) {
-	        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-	        String uploadDir = getServletContext().getRealPath("/uploads/");
-	        Path uploadPath = Paths.get(uploadDir);
-
-	        // Verificar e criar o diretório de upload se não existir
-	        if (!Files.exists(uploadPath)) {
-	            Files.createDirectories(uploadPath);
-	            LOGGER.info("Diretório de upload criado: " + uploadPath.toString());
-	        } else {
-	            LOGGER.info("Diretório de upload já existe: " + uploadPath.toString());
-	        }
-
-	        String relativeFilePath = "/uploads/" + System.currentTimeMillis() + "_" + fileName;
-	        String absoluteFilePath = uploadPath.resolve(System.currentTimeMillis() + "_" + fileName).toString();
-
-	        try (InputStream fileContent = filePart.getInputStream()) {
-	            Files.copy(fileContent, Paths.get(absoluteFilePath), StandardCopyOption.REPLACE_EXISTING);
-	            LOGGER.info("Arquivo salvo em: " + absoluteFilePath);
-	        } catch (IOException e) {
-	            LOGGER.log(Level.SEVERE, "Erro ao salvar o arquivo", e);
-	            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-	            response.getWriter().print("Erro ao salvar o arquivo.");
-	            return;
-	        }
-
-	        LOGGER.info("Caminho relativo salvo: " + relativeFilePath);
-
-	        String id = request.getParameter("id");
-	        ModelCadastro modelCadastro = daoCadastro.buscarCadastroPorId(Long.parseLong(id));
-	        modelCadastro.setFilePath(relativeFilePath); // Armazene o caminho relativo
-	        daoCadastro.gravarCadastro(modelCadastro);
-	        LOGGER.info("Caminho salvo no banco de dados: " + relativeFilePath);
-
-	        response.getWriter().write(relativeFilePath);
-	    } else {
-	        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-	        response.getWriter().print("Nenhum arquivo foi enviado.");
-	    }
-	}
-
-	
-	
-	/*private void handleFileUpload(HttpServletRequest request, HttpServletResponse response)
 	        throws IOException, ServletException, SQLException {
 	    Part filePart = request.getPart("file");
 
@@ -207,7 +159,7 @@ public class ServeletCadastro extends HttpServlet {
 	        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 	        response.getWriter().print("Nenhum arquivo foi enviado.");
 	    }
-	}*/
+	}
 
 
 	private void handleFormSubmission(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
