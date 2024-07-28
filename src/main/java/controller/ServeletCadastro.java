@@ -118,7 +118,7 @@ public class ServeletCadastro extends HttpServlet {
 
 	    if (filePart != null && filePart.getSize() > 0) {
 	        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-	        String uploadDir = getServletContext().getRealPath("/uploads");
+	        String uploadDir = getServletContext().getRealPath("/uploads/");
 	        Path uploadPath = Paths.get(uploadDir);
 	        
 	        
@@ -149,7 +149,7 @@ public class ServeletCadastro extends HttpServlet {
 	            daoCadastro.gravarCadastro(modelCadastro);
 
 	            // Correção: Geração da URL acessível publicamente
-	            String fileUrl = request.getContextPath() + "/uploads" + Paths.get(filePath).getFileName().toString();
+	            String fileUrl = request.getContextPath() + "/uploads/" + Paths.get(filePath).getFileName().toString();
 	            response.getWriter().write(fileUrl);
 	        } else {
 	            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

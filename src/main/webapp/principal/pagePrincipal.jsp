@@ -51,7 +51,7 @@
 
 	<div class="lista">
 		<form class="form-material" action="ServeletCadastro" method="post"
-			id="formUser" enctype="multipart/form-data">
+			id="formUser">
 			<input type="hidden" name="acao" id="acao" value="">
 			<div class="container my-4">
 				<div class="row">
@@ -67,7 +67,7 @@
 									<th scope="col">Função</th>
 									<th scope="col">Nome</th>
 									<th scope="col">Data nascimento</th>
-									<th scope="col" class="cpf-cell">Cpf</th>
+									<th scope="col">Cpf</th>
 									<th scope="col">Rg</th>
 									<th scope="col">Aso</th>
 									<th scope="col">Data Aso</th>
@@ -155,7 +155,8 @@
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="webjars/jquery/3.7.1/jquery.min.js"></script>
-	<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 	<!-- JavaScript (Table) -->
 	<script type="text/javascript" src="javaScript/cadastroJavaScript.js"></script>
 	<script defer

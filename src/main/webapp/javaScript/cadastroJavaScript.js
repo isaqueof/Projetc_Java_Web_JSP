@@ -41,11 +41,14 @@ function listUsers() {
 				ind += '</td>';
 
 				// Adiciona o campo de upload e o link para o PDF
-
 				ind += '<td>';
 				ind += `<input type="file" name="file" class="form-control" id="uploadPdf-${user.id}" accept=".pdf" style="display:none;" onchange="uploadPdf(${user.id})">`;
 				ind += `<button type="button" class="btn btn-sm btn-secondary" onclick="document.getElementById('uploadPdf-${user.id}').click()">Upload PDF</button>`;
-				ind += '<a href="' + user.pdfPath + '" class="btn btn-info btn-sm pdf-link" id="pdf-link-' + user.id + '" target="_blank">Visualizar PDF</a>';
+				if (user.pdfPath) {
+					ind += `<a href="/uploads/${user.pdfPath}" class="btn btn-info btn-sm pdf-link" id="pdf-link-${user.id}" target="_blank">Visualizar PDF</a>`;
+				} else {
+					ind += `<a href="#" class="btn btn-info btn-sm pdf-link" id="pdf-link-${user.id}" target="_blank" style="display:none;">Visualizar PDF</a>`;
+				}
 				ind += '</td>';
 
 
@@ -291,16 +294,6 @@ function salvarLinha(id) {
 }
 
 
-$(document).ready(function() {
-	// Adiciona um evento de mudança aos inputs de arquivo para acionar a função de upload
-	$(document).on('change', 'input[type="file"]', function() {
-		var id = $(this).attr('id').split('-')[1];
-		uploadPdf(id);
-	});
-});
-
-// Aqui está a função 'uploadPdf' ajustada com verificações adicionais
-
 function uploadPdf(id) {
 	var fileInput = document.getElementById('uploadPdf-' + id);
 	if (!fileInput || !fileInput.files || !fileInput.files[0]) {
@@ -314,9 +307,6 @@ function uploadPdf(id) {
 	formData.append("acao", "uploadPdf");
 	formData.append("id", id);
 
-	console.log("uploadPdf chamado para o ID: " + id);
-	console.log("Arquivo selecionado: " + file.name);
-
 	$.ajax({
 		url: document.getElementById('formUser').action,
 		type: "POST",
@@ -329,237 +319,129 @@ function uploadPdf(id) {
 			// Atualiza o link do PDF
 			var linkElement = document.getElementById('pdf-link-' + id);
 			if (linkElement) {
-				linkElement.href = response; // Ajuste conforme necessário
-				linkElement.style.display = 'inline-block'; // Exibe o link se estiver oculto
+				linkElement.href = response;
+				linkElement.style.display = 'inline-block';
 				linkElement.innerText = 'Visualizar PDF';
 			} else {
 				console.error('Elemento do link não encontrado.');
 			}
+
+		
 		},
 		error: function(xhr, status, error) {
 			console.error("Erro ao fazer upload: " + xhr.responseText);
 		}
 	});
 }
-
-
-/*function uploadPdf(id) {
-	var fileInput = document.getElementById('uploadPdf-' + id);
-	if (!fileInput || !fileInput.files || !fileInput.files[0]) {
-		console.error('Arquivo não selecionado ou input file não encontrado.');
-		return;
-	}
-	
-	var file = fileInput.files[0];
-	var formData = new FormData();
-	formData.append("file", file);
-	formData.append("acao", "uploadPdf");
-	formData.append("id", id);
-	
-	console.log("uploadPdf chamado para o ID: " + id);
-	console.log("Arquivo selecionado: " + file.name);
-	
-	$.ajax({
-		url: document.getElementById('formUser').action,
-		type: "POST",
-		data: formData,
-		processData: false,
-		contentType: false,
-		success: function(response) {
-			console.log("Upload bem-sucedido: " + response);
-	
-			// Atualiza o link do PDF
-			var linkElement = document.getElementById('pdf-link-' + id);
-			if (linkElement) {
-				linkElement.href = response; // Ajuste conforme necessário
-				linkElement.style.display = 'inline-block'; // Exibe o link se estiver oculto
-				linkElement.innerText = 'Visualizar PDF';
-			} else {
-				console.error('Elemento do link não encontrado.');
-			}
-		},
-		error: function(xhr, status, error) {
-			console.error("Erro ao fazer upload: " + xhr.responseText);
-		}
-	});
-}*/
-
-
-// Aqui está a função 'openUploadDialog' ajustada com verificações adicionais
-function openUploadDialog(id) {
-	console.log("Botão Upload clicado");
-	var uploadInput = document.getElementById('uploadPdf-' + id);
-	if (uploadInput) {
-		uploadInput.click();
-	} else {
-		console.error('Elemento do input file não encontrado.');
-	}
-}
-
-
-// Adiciona um evento de mudança aos inputs de arquivo para acionar a função de upload
-$(document).on('change', 'input[type="file"]', function() {
-	var id = $(this).attr('id').split('-')[1];
-	console.log('Arquivo selecionado para o ID:', id);
-	uploadPdf(id);
-});
-
-
-
-function buscarCadastroAjax() {
-	$.ajax({
-		url: 'ServeletCadastro?acao=buscarcadastroajax',
-		type: 'GET',
-		success: function(response) {
-			var users = JSON.parse(response);
-			var tableBody = document.getElementById('tableBody_users');
-			tableBody.innerHTML = ''; // Clear existing rows
-
-			users.forEach(function(user) {
-				var row = document.createElement('tr');
-
-				row.innerHTML = `
-                    <td style="display: none;">${user.id}</td>
-                    <td>${user.centrodecusto}</td>
-                    <td>${user.funcao}</td>
-                    <td>${user.nome}</td>
-                    <td>${user.datanascimento}</td>
-                    <td>${user.cpf}</td>
-                    <td>${user.rg}</td>
-                    <td>${user.aso}</td>
-                    <td>${user.dataaso}</td>
-                    <td><button class="btn btn-warning btn-sm" onclick="editUser(${user.id})">Editar</button></td>
-                    <td><input type="file" id="uploadPdf-${user.id}" style="display:none;" onchange="uploadPdf(${user.id})">
-                        <label for="uploadPdf-${user.id}" class="btn btn-info btn-sm">Upload PDF</label>
-                        <a href="${user.filePath ? user.filePath : '#'}" class="btn btn-info btn-sm pdf-link" id="pdf-link-${user.id}" target="_blank" ${user.filePath ? '' : 'style="display:none;"'}>Visualizar PDF</a>
-                    </td>
-                    <td><button class="btn btn-danger btn-sm" onclick="deletarUsuario(${user.id})">Deletar</button></td>
-                `;
-
-				tableBody.appendChild(row);
-			});
-		},
-		error: function(xhr, status, error) {
-			console.error("Erro ao buscar cadastros: " + xhr.responseText);
-		}
-	});
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-	buscarCadastroAjax(); // Chama a função para carregar os dados quando a página for carregada
-});
-
-
-
 
 
 $(document).ready(function() {
-    function isValidCPF(cpf) {
-        cpf = cpf.replace(/[^\d]+/g, '');
-        if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
-        var soma = 0, resto;
-        for (var i = 1; i <= 9; i++) soma = soma + parseInt(cpf.substring(i-1, i)) * (11 - i);
-        resto = (soma * 10) % 11;
-        if ((resto == 10) || (resto == 11))  resto = 0;
-        if (resto != parseInt(cpf.substring(9, 10)) ) return false;
-        soma = 0;
-        for (var i = 1; i <= 10; i++) soma = soma + parseInt(cpf.substring(i-1, i)) * (12 - i);
-        resto = (soma * 10) % 11;
-        if ((resto == 10) || (resto == 11))  resto = 0;
-        if (resto != parseInt(cpf.substring(10, 11) ) ) return false;
-        return true;
-    }
+	function isValidCPF(cpf) {
+		cpf = cpf.replace(/[^\d]+/g, '');
+		if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+		var soma = 0, resto;
+		for (var i = 1; i <= 9; i++) soma = soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+		resto = (soma * 10) % 11;
+		if ((resto == 10) || (resto == 11)) resto = 0;
+		if (resto != parseInt(cpf.substring(9, 10))) return false;
+		soma = 0;
+		for (var i = 1; i <= 10; i++) soma = soma + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+		resto = (soma * 10) % 11;
+		if ((resto == 10) || (resto == 11)) resto = 0;
+		if (resto != parseInt(cpf.substring(10, 11))) return false;
+		return true;
+	}
 
-    function formatCPF(cpf) {
-        return cpf.replace(/\D/g, '')
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d)/, '$1-$2')
-            .replace(/(-\d{2})\d+?$/, '$1');
-    }
+	function formatCPF(cpf) {
+		return cpf.replace(/\D/g, '')
+			.replace(/(\d{3})(\d)/, '$1.$2')
+			.replace(/(\d{3})(\d)/, '$1.$2')
+			.replace(/(\d{3})(\d)/, '$1-$2')
+			.replace(/(-\d{2})\d+?$/, '$1');
+	}
 
-    function validateAndFormatCPF(element) {
-        var cpf = element.val();
-        if (!isValidCPF(cpf)) {
-            alert('CPF inválido!');
-            element.focus();
-            return false;
-        }
-        element.val(formatCPF(cpf));
-        return true;
-    }
+	function validateAndFormatCPF(element) {
+		var cpf = element.val();
+		if (!isValidCPF(cpf)) {
+			alert('CPF inválido!');
+			element.focus();
+			return false;
+		}
+		element.val(formatCPF(cpf));
+		return true;
+	}
 
-    function editarLinha(id) {
-        let tabela = $('#tabelaresultados').DataTable();
-        let linha = tabela.row(function(idx, data, node) {
-            return data[0] === id ? true : false;
-        });
+	function editarLinha(id) {
+		let tabela = $('#tabelaresultados').DataTable();
+		let linha = tabela.row(function(idx, data, node) {
+			return data[0] === id ? true : false;
+		});
 
-        linha.nodes().to$().find('td[data-field]').each(function() {
-            let celula = $(this);
-            let valor = celula.text();
-            celula.empty().append($('<input type="text" class="form-control input-edit" />').val(valor));
-        });
+		linha.nodes().to$().find('td[data-field]').each(function() {
+			let celula = $(this);
+			let valor = celula.text();
+			celula.empty().append($('<input type="text" class="form-control input-edit" />').val(valor));
+		});
 
-        linha.nodes().to$().find('button[onclick^="editarLinha"]').attr('onclick', 'salvarLinha(' + id + ')');
-    }
+		linha.nodes().to$().find('button[onclick^="editarLinha"]').attr('onclick', 'salvarLinha(' + id + ')');
+	}
 
-    let clicks = 0;
-    let timeout;
+	let clicks = 0;
+	let timeout;
 
-    $("#tabelaresultados").on("click", ".editar-btn", function() {
-        let linha = $(this).closest("tr");
-        linha.find("td[data-field]").each(function() {
-            let valor = $(this).text();
-            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
-        });
-        linha.find(".editar-btn").hide();
-        linha.find(".salvar-btn").show();
-    });
+	$("#tabelaresultados").on("click", ".editar-btn", function() {
+		let linha = $(this).closest("tr");
+		linha.find("td[data-field]").each(function() {
+			let valor = $(this).text();
+			$(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
+		});
+		linha.find(".editar-btn").hide();
+		linha.find(".salvar-btn").show();
+	});
 
-    $("#tabelaresultados").on("click", ".salvar-btn", function() {
-        let linha = $(this).closest("tr");
-        let cpfCell = linha.find("td[data-field='cpf'] input");
-        if (!validateAndFormatCPF(cpfCell)) {
-            return;
-        }
+	$("#tabelaresultados").on("click", ".salvar-btn", function() {
+		let linha = $(this).closest("tr");
+		let cpfCell = linha.find("td[data-field='cpf'] input");
+		if (!validateAndFormatCPF(cpfCell)) {
+			return;
+		}
 
-        linha.find("td[data-field] input").each(function() {
-            let novoValor = $(this).val();
-            $(this).parent().text(novoValor);
-        });
-        linha.find(".salvar-btn").hide();
-        linha.find(".editar-btn").show();
+		linha.find("td[data-field] input").each(function() {
+			let novoValor = $(this).val();
+			$(this).parent().text(novoValor);
+		});
+		linha.find(".salvar-btn").hide();
+		linha.find(".editar-btn").show();
 
-        let id = linha.attr('id').split('-')[1];
-        // salvarLinha(id);
-    });
+		let id = linha.attr('id').split('-')[1];
+		// salvarLinha(id);
+	});
 
-    $("#tabelaresultados").on("click", "td[data-field]", function() {
-        clicks++;
-        if (clicks === 1) {
-            timeout = setTimeout(function() {
-                clicks = 0;
-            }, 300);
-        } else {
-            clearTimeout(timeout);
-            clicks = 0;
-            let valor = $(this).text();
-            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
-            $(this).closest("tr").find(".editar-btn").hide();
-            $(this).closest("tr").find(".salvar-btn").show();
+	$("#tabelaresultados").on("click", "td[data-field]", function() {
+		clicks++;
+		if (clicks === 1) {
+			timeout = setTimeout(function() {
+				clicks = 0;
+			}, 300);
+		} else {
+			clearTimeout(timeout);
+			clicks = 0;
+			let valor = $(this).text();
+			$(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
+			$(this).closest("tr").find(".editar-btn").hide();
+			$(this).closest("tr").find(".salvar-btn").show();
 
-            // Adiciona o evento de formatação dinâmica
-            $(this).find('input').on('input', function() {
-                this.value = formatCPF(this.value);
-            });
-        }
-    });
+			// Adiciona o evento de formatação dinâmica
+			$(this).find('input').on('input', function() {
+				this.value = formatCPF(this.value);
+			});
+		}
+	});
 
-    // Adiciona o evento de formatação dinâmica ao clicar no botão editar
-    $("#tabelaresultados").on("input", "td[data-field='cpf'] input", function() {
-        this.value = formatCPF(this.value);
-    });
+	// Adiciona o evento de formatação dinâmica ao clicar no botão editar
+	$("#tabelaresultados").on("input", "td[data-field='cpf'] input", function() {
+		this.value = formatCPF(this.value);
+	});
 });
 
 
@@ -568,113 +450,113 @@ $(document).ready(function() {
 
 
 function validateAndFormatDate(element) {
-    var date = element.val();
+	var date = element.val();
 
-    if (!isValidDate(date)) {
-        alert('Data inválida!');
-        element.focus();
-        return false;
-    }
+	if (!isValidDate(date)) {
+		alert('Data inválida!');
+		element.focus();
+		return false;
+	}
 
-    element.val(formatDate(date));
-    return true;
+	element.val(formatDate(date));
+	return true;
 }
 
 function isValidDate(date) {
-    var datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+	var datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 
-    if (!datePattern.test(date)) {
-        return false;
-    }
+	if (!datePattern.test(date)) {
+		return false;
+	}
 
-    var parts = date.split('/');
-    var day = parseInt(parts[0], 10);
-    var month = parseInt(parts[1], 10);
-    var year = parseInt(parts[2], 10);
+	var parts = date.split('/');
+	var day = parseInt(parts[0], 10);
+	var month = parseInt(parts[1], 10);
+	var year = parseInt(parts[2], 10);
 
-    var dateObj = new Date(year, month - 1, day);
-    return (dateObj.getFullYear() === year && dateObj.getMonth() === month - 1 && dateObj.getDate() === day);
+	var dateObj = new Date(year, month - 1, day);
+	return (dateObj.getFullYear() === year && dateObj.getMonth() === month - 1 && dateObj.getDate() === day);
 }
 
 function formatDate(date) {
-    var parts = date.split('/');
-    var day = parts[0].padStart(2, '0');
-    var month = parts[1].padStart(2, '0');
-    var year = parts[2];
+	var parts = date.split('/');
+	var day = parts[0].padStart(2, '0');
+	var month = parts[1].padStart(2, '0');
+	var year = parts[2];
 
-    return `${day}/${month}/${year}`;
+	return `${day}/${month}/${year}`;
 }
 
 $(document).ready(function() {
-    let clicks = 0;
-    let timeout;
+	let clicks = 0;
+	let timeout;
 
-    $("#tabelaresultados").on("click", ".editar-btn", function() {
-        let linha = $(this).closest("tr");
-        linha.find("td[data-field]").each(function() {
-            let valor = $(this).text();
-            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
-        });
-        linha.find(".editar-btn").hide();
-        linha.find(".salvar-btn").show();
-    });
+	$("#tabelaresultados").on("click", ".editar-btn", function() {
+		let linha = $(this).closest("tr");
+		linha.find("td[data-field]").each(function() {
+			let valor = $(this).text();
+			$(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
+		});
+		linha.find(".editar-btn").hide();
+		linha.find(".salvar-btn").show();
+	});
 
-    $("#tabelaresultados").on("click", ".salvar-btn", function() {
-        let linha = $(this).closest("tr");
-        let valid = true;
+	$("#tabelaresultados").on("click", ".salvar-btn", function() {
+		let linha = $(this).closest("tr");
+		let valid = true;
 
-        linha.find("td[data-field] input").each(function() {
-            let novoValor = $(this).val();
-            let dataField = $(this).parent().attr('data-field');
-            if (dataField === 'cpf') {
-                if (!validateAndFormatCPF($(this))) {
-                    valid = false;
-                    return false; // Saia do loop se o CPF for inválido
-                }
-            } else if (dataField === 'datanascimento' || dataField === 'dataaso') {
-                if (!validateAndFormatDate($(this))) {
-                    valid = false;
-                    return false; // Saia do loop se a data for inválida
-                }
-            }
-            $(this).parent().text(novoValor);
-        });
+		linha.find("td[data-field] input").each(function() {
+			let novoValor = $(this).val();
+			let dataField = $(this).parent().attr('data-field');
+			if (dataField === 'cpf') {
+				if (!validateAndFormatCPF($(this))) {
+					valid = false;
+					return false; // Saia do loop se o CPF for inválido
+				}
+			} else if (dataField === 'datanascimento' || dataField === 'dataaso') {
+				if (!validateAndFormatDate($(this))) {
+					valid = false;
+					return false; // Saia do loop se a data for inválida
+				}
+			}
+			$(this).parent().text(novoValor);
+		});
 
-        if (valid) {
-            linha.find(".salvar-btn").hide();
-            linha.find(".editar-btn").show();
+		if (valid) {
+			linha.find(".salvar-btn").hide();
+			linha.find(".editar-btn").show();
 
-            let id = linha.attr('id').split('-')[1];
-            // salvarLinha(id); // Chame a função de salvamento se necessário
-        }
-    });
+			let id = linha.attr('id').split('-')[1];
+			// salvarLinha(id); // Chame a função de salvamento se necessário
+		}
+	});
 
-    $("#tabelaresultados").on("click", "td[data-field]", function() {
-        clicks++;
-        if (clicks === 1) {
-            timeout = setTimeout(function() {
-                clicks = 0;
-            }, 300);
-        } else {
-            clearTimeout(timeout);
-            clicks = 0;
-            let valor = $(this).text();
-            let input = $('<input type="text" class="form-control input-edit" value="' + valor + '">');
-            $(this).html(input);
-            $(this).closest("tr").find(".editar-btn").hide();
-            $(this).closest("tr").find(".salvar-btn").show();
+	$("#tabelaresultados").on("click", "td[data-field]", function() {
+		clicks++;
+		if (clicks === 1) {
+			timeout = setTimeout(function() {
+				clicks = 0;
+			}, 300);
+		} else {
+			clearTimeout(timeout);
+			clicks = 0;
+			let valor = $(this).text();
+			let input = $('<input type="text" class="form-control input-edit" value="' + valor + '">');
+			$(this).html(input);
+			$(this).closest("tr").find(".editar-btn").hide();
+			$(this).closest("tr").find(".salvar-btn").show();
 
-            if ($(this).attr('data-field') === 'datanascimento' || $(this).attr('data-field') === 'dataaso') {
-                input.on('input', function() {
-                    var datePattern = $(this).val().replace(/\D/g, '')
-                        .replace(/(\d{2})(\d)/, '$1/$2')
-                        .replace(/(\d{2})(\d)/, '$1/$2')
-                        .replace(/(\d{4})\d+?$/, '$1');
-                    $(this).val(datePattern);
-                });
-            }
-        }
-    });
+			if ($(this).attr('data-field') === 'datanascimento' || $(this).attr('data-field') === 'dataaso') {
+				input.on('input', function() {
+					var datePattern = $(this).val().replace(/\D/g, '')
+						.replace(/(\d{2})(\d)/, '$1/$2')
+						.replace(/(\d{2})(\d)/, '$1/$2')
+						.replace(/(\d{4})\d+?$/, '$1');
+					$(this).val(datePattern);
+				});
+			}
+		}
+	});
 });
 
 
