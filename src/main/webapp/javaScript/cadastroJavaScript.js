@@ -1,5 +1,6 @@
 window.addEventListener('load', () => {
 	listUsers();
+
 })
 
 
@@ -28,14 +29,14 @@ function listUsers() {
 				ind += `<td data-field="funcao" type="text">${user.funcao}</td>`;
 				ind += `<td data-field="nome" type="text">${user.nome}</td>`;
 				ind += `<td data-field="datanascimento" type="date">${user.datanascimento}</td>`;
-				ind += `<td data-field="cpf" type="text">${user.cpf}</td>`;
+				ind += `<td data-field="cpf" type="text" class="cpf-cell" id="cpf-validade">${user.cpf}</td>`;
 				ind += `<td data-field="rg" type="text">${user.rg}</td>`;
 				ind += `<td data-field="aso" type="text">${user.aso}</td>`;
 				ind += `<td data-field="dataaso" type="date">${user.dataaso}</td>`;
 
 				// Adiciona os botões Editar e Salvar
 				ind += '<td>';
-				ind += `<button class="btn btn-sm btn-primary editar-btn" type="button" onclick="editarLinha(${user.id})"><i class="fa-solid fa-pencil"></i></button>`;
+				ind += `<button class="btn btn-sm btn-primary editar-btn edit-btn" type="button" onclick="editarLinha(${user.id})"><i class="fa-solid fa-pencil"></i></button>`;
 				ind += `<button class="btn btn-success btn-sm salvar-btn" onclick="salvarLinha(${user.id})" style="display: none;" type="button"><i class="fa-solid fa-download"></i> Salvar</button>`;
 				ind += '</td>';
 
@@ -55,6 +56,18 @@ function listUsers() {
 
 				ind += '</tr>';
 			});
+
+
+			function validateAndFormatCPF(element) {
+				var cpf = element.text();
+				if (!isValidCPF(cpf)) {
+					alert('CPF inválido!');
+					element.focus();
+					return false;
+				}
+				element.text(formatCPF(cpf));
+				return true;
+			}
 
 			$('#tableBody_users').html(ind);
 			if ($.fn.DataTable.isDataTable('#tabelaresultados')) {
@@ -117,12 +130,6 @@ document.getElementById('cpf').addEventListener('input', function(e) {
 		.replace(/(-\d{2})\d+?$/, '$1'); // Impede entrada de mais de 11 dígitos
 	e.target.value = cpfPattern;
 })
-
-
-
-
-
-
 
 // Adiciona um evento de input ao seu campo de entrada para ajustar a largura dinamicamente
 document.querySelectorAll('.input-edit').forEach(function(input) {
@@ -342,16 +349,16 @@ function uploadPdf(id) {
 		console.error('Arquivo não selecionado ou input file não encontrado.');
 		return;
 	}
-
+	
 	var file = fileInput.files[0];
 	var formData = new FormData();
 	formData.append("file", file);
 	formData.append("acao", "uploadPdf");
 	formData.append("id", id);
-
+	
 	console.log("uploadPdf chamado para o ID: " + id);
 	console.log("Arquivo selecionado: " + file.name);
-
+	
 	$.ajax({
 		url: document.getElementById('formUser').action,
 		type: "POST",
@@ -360,7 +367,7 @@ function uploadPdf(id) {
 		contentType: false,
 		success: function(response) {
 			console.log("Upload bem-sucedido: " + response);
-
+	
 			// Atualiza o link do PDF
 			var linkElement = document.getElementById('pdf-link-' + id);
 			if (linkElement) {
@@ -446,63 +453,113 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-function editarLinha(id) {
-	let tabela = $('#tabelaresultados').DataTable();
-	let linha = tabela.row(function(idx, data, node) {
-		return data[0] === id ? true : false;
-	});
-
-	linha.nodes().to$().find('td[data-field]').each(function() {
-		let celula = $(this);
-		let valor = celula.text();
-		celula.empty().append($('<input type="text" class="form-control input-edit" />').val(valor));
-	});
-
-	linha.nodes().to$().find('button[onclick^="editarLinha"]').attr('onclick', 'salvarLinha(' + id + ')');
-}
-
 $(document).ready(function() {
-	let clicks = 0;
-	let timeout;
+    function isValidCPF(cpf) {
+        cpf = cpf.replace(/[^\d]+/g, '');
+        if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+        var soma = 0, resto;
+        for (var i = 1; i <= 9; i++) soma = soma + parseInt(cpf.substring(i-1, i)) * (11 - i);
+        resto = (soma * 10) % 11;
+        if ((resto == 10) || (resto == 11))  resto = 0;
+        if (resto != parseInt(cpf.substring(9, 10)) ) return false;
+        soma = 0;
+        for (var i = 1; i <= 10; i++) soma = soma + parseInt(cpf.substring(i-1, i)) * (12 - i);
+        resto = (soma * 10) % 11;
+        if ((resto == 10) || (resto == 11))  resto = 0;
+        if (resto != parseInt(cpf.substring(10, 11) ) ) return false;
+        return true;
+    }
 
-	$("#tabelaresultados").on("click", ".editar-btn", function() {
-		let linha = $(this).closest("tr");
-		linha.find("td[data-field]").each(function() {
-			let valor = $(this).text();
-			$(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
-		});
-		linha.find(".editar-btn").hide();
-		linha.find(".salvar-btn").show();
-	});
+    function formatCPF(cpf) {
+        return cpf.replace(/\D/g, '')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1-$2')
+            .replace(/(-\d{2})\d+?$/, '$1');
+    }
 
-	$("#tabelaresultados").on("click", ".salvar-btn", function() {
-		let linha = $(this).closest("tr");
-		linha.find("td[data-field] input").each(function() {
-			let novoValor = $(this).val();
-			$(this).parent().text(novoValor);
-		});
-		linha.find(".salvar-btn").hide();
-		linha.find(".editar-btn").show();
+    function validateAndFormatCPF(element) {
+        var cpf = element.val();
+        if (!isValidCPF(cpf)) {
+            alert('CPF inválido!');
+            element.focus();
+            return false;
+        }
+        element.val(formatCPF(cpf));
+        return true;
+    }
 
-		let id = linha.attr('id').split('-')[1];
-		// salvarLinha(id);
-	});
+    function editarLinha(id) {
+        let tabela = $('#tabelaresultados').DataTable();
+        let linha = tabela.row(function(idx, data, node) {
+            return data[0] === id ? true : false;
+        });
 
-	$("#tabelaresultados").on("click", "td[data-field]", function() {
-		clicks++;
-		if (clicks === 1) {
-			timeout = setTimeout(function() {
-				clicks = 0;
-			}, 300);
-		} else {
-			clearTimeout(timeout);
-			clicks = 0;
-			let valor = $(this).text();
-			$(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
-			$(this).closest("tr").find(".editar-btn").hide();
-			$(this).closest("tr").find(".salvar-btn").show();
-		}
-	});
+        linha.nodes().to$().find('td[data-field]').each(function() {
+            let celula = $(this);
+            let valor = celula.text();
+            celula.empty().append($('<input type="text" class="form-control input-edit" />').val(valor));
+        });
+
+        linha.nodes().to$().find('button[onclick^="editarLinha"]').attr('onclick', 'salvarLinha(' + id + ')');
+    }
+
+    let clicks = 0;
+    let timeout;
+
+    $("#tabelaresultados").on("click", ".editar-btn", function() {
+        let linha = $(this).closest("tr");
+        linha.find("td[data-field]").each(function() {
+            let valor = $(this).text();
+            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
+        });
+        linha.find(".editar-btn").hide();
+        linha.find(".salvar-btn").show();
+    });
+
+    $("#tabelaresultados").on("click", ".salvar-btn", function() {
+        let linha = $(this).closest("tr");
+        let cpfCell = linha.find("td[data-field='cpf'] input");
+        if (!validateAndFormatCPF(cpfCell)) {
+            return;
+        }
+
+        linha.find("td[data-field] input").each(function() {
+            let novoValor = $(this).val();
+            $(this).parent().text(novoValor);
+        });
+        linha.find(".salvar-btn").hide();
+        linha.find(".editar-btn").show();
+
+        let id = linha.attr('id').split('-')[1];
+        // salvarLinha(id);
+    });
+
+    $("#tabelaresultados").on("click", "td[data-field]", function() {
+        clicks++;
+        if (clicks === 1) {
+            timeout = setTimeout(function() {
+                clicks = 0;
+            }, 300);
+        } else {
+            clearTimeout(timeout);
+            clicks = 0;
+            let valor = $(this).text();
+            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
+            $(this).closest("tr").find(".editar-btn").hide();
+            $(this).closest("tr").find(".salvar-btn").show();
+
+            // Adiciona o evento de formatação dinâmica
+            $(this).find('input').on('input', function() {
+                this.value = formatCPF(this.value);
+            });
+        }
+    });
+
+    // Adiciona o evento de formatação dinâmica ao clicar no botão editar
+    $("#tabelaresultados").on("input", "td[data-field='cpf'] input", function() {
+        this.value = formatCPF(this.value);
+    });
 });
 
 
@@ -539,3 +596,4 @@ function criarDeleteComAjax(id) {
 	});
 
 }
+

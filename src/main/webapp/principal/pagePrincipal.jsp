@@ -67,7 +67,7 @@
 									<th scope="col">Função</th>
 									<th scope="col">Nome</th>
 									<th scope="col">Data nascimento</th>
-									<th scope="col">Cpf</th>
+									<th scope="col" class="cpf-cell">Cpf</th>
 									<th scope="col">Rg</th>
 									<th scope="col">Aso</th>
 									<th scope="col">Data Aso</th>
