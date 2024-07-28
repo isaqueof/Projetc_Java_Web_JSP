@@ -60,18 +60,6 @@ function listUsers() {
 				ind += '</tr>';
 			});
 
-
-			function validateAndFormatCPF(element) {
-				var cpf = element.text();
-				if (!isValidCPF(cpf)) {
-					alert('CPF inválido!');
-					element.focus();
-					return false;
-				}
-				element.text(formatCPF(cpf));
-				return true;
-			}
-
 			$('#tableBody_users').html(ind);
 			if ($.fn.DataTable.isDataTable('#tabelaresultados')) {
 				$('#tabelaresultados').DataTable().clear().destroy();
@@ -124,6 +112,17 @@ function listUsers() {
 }
 
 
+function validateAndFormatCPF(element) {
+	var cpf = element.text();
+	if (!isValidCPF(cpf)) {
+		alert('CPF inválido!');
+		element.focus();
+		return false;
+	}
+	element.text(formatCPF(cpf));
+	return true;
+}
+
 document.getElementById('cpf').addEventListener('input', function(e) {
 	var value = e.target.value;
 	var cpfPattern = value.replace(/\D/g, '') // Remove qualquer coisa que não seja número
@@ -134,13 +133,13 @@ document.getElementById('cpf').addEventListener('input', function(e) {
 	e.target.value = cpfPattern;
 })
 
-// Adiciona um evento de input ao seu campo de entrada para ajustar a largura dinamicamente
+/*/ Adiciona um evento de input ao seu campo de entrada para ajustar a largura dinamicamente
 document.querySelectorAll('.input-edit').forEach(function(input) {
 	adjustWidthToText(input); // Ajusta a largura inicialmente
 	input.addEventListener('input', function() {
 		adjustWidthToText(input);
 	});
-});
+});*/
 
 
 
@@ -230,29 +229,6 @@ function gravarCadastro() {
 	});
 }
 
-
-function saveUser() {
-	const formData = new FormData(document.getElementById('formUser'));
-	formData.append('acao', 'salvaajax');
-
-	$.ajax({
-		method: 'POST',
-		url: 'ServeletCadastro',
-		data: formData,
-		processData: false,
-		contentType: false,
-		success: function(response) {
-			alert('Cadastro salvo com sucesso!');
-			listUsers();
-		},
-		error: function(xhr, status, errorThrown) {
-			alert('Erro ao salvar cadastro: ' + xhr.responseText);
-		}
-	});
-}
-
-
-
 function salvarLinha(id) {
 	var urlAction = document.getElementById('formUser').action;
 
@@ -294,271 +270,189 @@ function salvarLinha(id) {
 }
 
 
-function uploadPdf(id) {
-	var fileInput = document.getElementById('uploadPdf-' + id);
-	if (!fileInput || !fileInput.files || !fileInput.files[0]) {
-		console.error('Arquivo não selecionado ou input file não encontrado.');
-		return;
-	}
-
-	var file = fileInput.files[0];
-	var formData = new FormData();
-	formData.append("file", file);
-	formData.append("acao", "uploadPdf");
-	formData.append("id", id);
-
-	$.ajax({
-		url: document.getElementById('formUser').action,
-		type: "POST",
-		data: formData,
-		processData: false,
-		contentType: false,
-		success: function(response) {
-			console.log("Upload bem-sucedido: " + response);
-
-			// Atualiza o link do PDF
-			var linkElement = document.getElementById('pdf-link-' + id);
-			if (linkElement) {
-				linkElement.href = response;
-				linkElement.style.display = 'inline-block';
-				linkElement.innerText = 'Visualizar PDF';
-			} else {
-				console.error('Elemento do link não encontrado.');
-			}
-
-		
-		},
-		error: function(xhr, status, error) {
-			console.error("Erro ao fazer upload: " + xhr.responseText);
-		}
-	});
-}
-
-
 $(document).ready(function() {
-	function isValidCPF(cpf) {
-		cpf = cpf.replace(/[^\d]+/g, '');
-		if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
-		var soma = 0, resto;
-		for (var i = 1; i <= 9; i++) soma = soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);
-		resto = (soma * 10) % 11;
-		if ((resto == 10) || (resto == 11)) resto = 0;
-		if (resto != parseInt(cpf.substring(9, 10))) return false;
-		soma = 0;
-		for (var i = 1; i <= 10; i++) soma = soma + parseInt(cpf.substring(i - 1, i)) * (12 - i);
-		resto = (soma * 10) % 11;
-		if ((resto == 10) || (resto == 11)) resto = 0;
-		if (resto != parseInt(cpf.substring(10, 11))) return false;
-		return true;
-	}
+    function isValidCPF(cpf) {
+        cpf = cpf.replace(/[^\d]+/g, '');
+        if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+        var soma = 0, resto;
+        for (var i = 1; i <= 9; i++) soma = soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+        resto = (soma * 10) % 11;
+        if ((resto == 10) || (resto == 11)) resto = 0;
+        if (resto != parseInt(cpf.substring(9, 10))) return false;
+        soma = 0;
+        for (var i = 1; i <= 10; i++) soma = soma + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+        resto = (soma * 10) % 11;
+        if ((resto == 10) || (resto == 11)) resto = 0;
+        if (resto != parseInt(cpf.substring(10, 11))) return false;
+        return true;
+    }
 
-	function formatCPF(cpf) {
-		return cpf.replace(/\D/g, '')
-			.replace(/(\d{3})(\d)/, '$1.$2')
-			.replace(/(\d{3})(\d)/, '$1.$2')
-			.replace(/(\d{3})(\d)/, '$1-$2')
-			.replace(/(-\d{2})\d+?$/, '$1');
-	}
+    function formatCPF(cpf) {
+        return cpf.replace(/\D/g, '')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1-$2')
+            .replace(/(-\d{2})\d+?$/, '$1');
+    }
 
-	function validateAndFormatCPF(element) {
-		var cpf = element.val();
-		if (!isValidCPF(cpf)) {
-			alert('CPF inválido!');
-			element.focus();
-			return false;
-		}
-		element.val(formatCPF(cpf));
-		return true;
-	}
+    function validateAndFormatCPF(element) {
+        var cpf = element.val().replace(/\D/g, '');
+        if (!isValidCPF(cpf)) {
+            alert('CPF inválido!');
+            element.focus();
+            return false;
+        }
+        element.val(formatCPF(cpf));
+        return true;
+    }
 
-	function editarLinha(id) {
-		let tabela = $('#tabelaresultados').DataTable();
-		let linha = tabela.row(function(idx, data, node) {
-			return data[0] === id ? true : false;
-		});
+    function isValidDate(date) {
+        var datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+        if (!datePattern.test(date)) return false;
 
-		linha.nodes().to$().find('td[data-field]').each(function() {
-			let celula = $(this);
-			let valor = celula.text();
-			celula.empty().append($('<input type="text" class="form-control input-edit" />').val(valor));
-		});
+        var parts = date.split('/');
+        var day = parseInt(parts[0], 10);
+        var month = parseInt(parts[1], 10);
+        var year = parseInt(parts[2], 10);
 
-		linha.nodes().to$().find('button[onclick^="editarLinha"]').attr('onclick', 'salvarLinha(' + id + ')');
-	}
+        var dateObj = new Date(year, month - 1, day);
+        return (dateObj.getFullYear() === year && dateObj.getMonth() === month - 1 && dateObj.getDate() === day);
+    }
 
-	let clicks = 0;
-	let timeout;
+    function formatDate(date) {
+        var parts = date.split('/');
+        var day = parts[0].padStart(2, '0');
+        var month = parts[1].padStart(2, '0');
+        var year = parts[2];
+        return `${day}/${month}/${year}`;
+    }
 
-	$("#tabelaresultados").on("click", ".editar-btn", function() {
-		let linha = $(this).closest("tr");
-		linha.find("td[data-field]").each(function() {
-			let valor = $(this).text();
-			$(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
-		});
-		linha.find(".editar-btn").hide();
-		linha.find(".salvar-btn").show();
-	});
+    function validateAndFormatDate(element) {
+        var date = element.val().replace(/\D/g, '');
+        if (!isValidDate(date)) {
+            alert('Data inválida!');
+            element.focus();
+            return false;
+        }
+        element.val(formatDate(date));
+        return true;
+    }
 
-	$("#tabelaresultados").on("click", ".salvar-btn", function() {
-		let linha = $(this).closest("tr");
-		let cpfCell = linha.find("td[data-field='cpf'] input");
-		if (!validateAndFormatCPF(cpfCell)) {
-			return;
-		}
+    function editarLinha(id) {
+        let tabela = $('#tabelaresultados').DataTable();
+        let linha = tabela.row(function(idx, data, node) {
+            return data[0] === id ? true : false;
+        });
 
-		linha.find("td[data-field] input").each(function() {
-			let novoValor = $(this).val();
-			$(this).parent().text(novoValor);
-		});
-		linha.find(".salvar-btn").hide();
-		linha.find(".editar-btn").show();
+        linha.nodes().to$().find('td[data-field]').each(function() {
+            let celula = $(this);
+            let valor = celula.text();
+            celula.empty().append($('<input type="text" class="form-control input-edit" />').val(valor));
+        });
 
-		let id = linha.attr('id').split('-')[1];
-		// salvarLinha(id);
-	});
+        linha.nodes().to$().find('button[onclick^="editarLinha"]').attr('onclick', 'salvarLinha(' + id + ')');
+    }
 
-	$("#tabelaresultados").on("click", "td[data-field]", function() {
-		clicks++;
-		if (clicks === 1) {
-			timeout = setTimeout(function() {
-				clicks = 0;
-			}, 300);
-		} else {
-			clearTimeout(timeout);
-			clicks = 0;
-			let valor = $(this).text();
-			$(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
-			$(this).closest("tr").find(".editar-btn").hide();
-			$(this).closest("tr").find(".salvar-btn").show();
+    let clicks = 0;
+    let timeout;
 
-			// Adiciona o evento de formatação dinâmica
-			$(this).find('input').on('input', function() {
-				this.value = formatCPF(this.value);
-			});
-		}
-	});
+    $("#tabelaresultados").on("click", ".editar-btn", function() {
+        let linha = $(this).closest("tr");
+        linha.find("td[data-field]").each(function() {
+            let valor = $(this).text();
+            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
+        });
+        linha.find(".editar-btn").hide();
+        linha.find(".salvar-btn").show();
+    });
 
-	// Adiciona o evento de formatação dinâmica ao clicar no botão editar
-	$("#tabelaresultados").on("input", "td[data-field='cpf'] input", function() {
-		this.value = formatCPF(this.value);
-	});
+    $("#tabelaresultados").on("click", ".salvar-btn", function() {
+        let linha = $(this).closest("tr");
+        let cpfCell = linha.find("td[data-field='cpf'] input");
+        if (!validateAndFormatCPF(cpfCell)) {
+            return;
+        }
+
+        let dataFields = ['datanascimento', 'dataaso'];
+        let valid = true;
+        
+        linha.find("td[data-field] input").each(function() {
+            let dataField = $(this).parent().attr('data-field');
+            if (dataFields.includes(dataField)) {
+                if (!validateAndFormatDate($(this))) {
+                    valid = false;
+                    return false; // Interrompe o loop se a validação falhar
+                }
+            }
+            let novoValor = $(this).val();
+            $(this).parent().text(novoValor);
+        });
+
+        if (valid) {
+            linha.find(".salvar-btn").hide();
+            linha.find(".editar-btn").show();
+            let id = linha.attr('id').split('-')[1];
+            // salvarLinha(id);
+        }
+    });
+
+    $("#tabelaresultados").on("click", "td[data-field]", function() {
+        clicks++;
+        if (clicks === 1) {
+            timeout = setTimeout(function() {
+                clicks = 0;
+            }, 300);
+        } else {
+            clearTimeout(timeout);
+            clicks = 0;
+            let valor = $(this).text();
+            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
+            $(this).closest("tr").find(".editar-btn").hide();
+            $(this).closest("tr").find(".salvar-btn").show();
+
+            // Adiciona o evento de formatação dinâmica
+            $(this).find('input').on('input', function() {
+                let dataField = $(this).closest('td').attr('data-field');
+                if (dataField === 'cpf') {
+                    this.value = formatCPF(this.value.replace(/\D/g, ''));
+                } else if (dataField === 'datanascimento' || dataField === 'dataaso') {
+                    let datePattern = this.value.replace(/\D/g, '')
+                        .replace(/(\d{2})(\d)/, '$1/$2')
+                        .replace(/(\d{2})(\d)/, '$1/$2')
+                        .replace(/(\d{4})\d+?$/, '$1');
+                    this.value = datePattern;
+
+                    // Limita o mês até 12
+                    let parts = this.value.split('/');
+                    if (parts[1] > 12) {
+                        parts[1] = '12';
+                        this.value = parts.join('/');
+                    }
+                }
+            });
+        }
+    });
+
+    // Adiciona o evento de formatação dinâmica ao clicar no botão editar
+    $("#tabelaresultados").on("input", "td[data-field='cpf'] input", function() {
+        this.value = formatCPF(this.value.replace(/\D/g, ''));
+    });
+
+    $("#tabelaresultados").on("input", "td[data-field='datanascimento'] input, td[data-field='dataaso'] input", function() {
+        let datePattern = this.value.replace(/\D/g, '')
+            .replace(/(\d{2})(\d)/, '$1/$2')
+            .replace(/(\d{2})(\d)/, '$1/$2')
+            .replace(/(\d{4})\d+?$/, '$1');
+        this.value = datePattern;
+
+        // Limita o mês até 12
+        let parts = this.value.split('/');
+        if (parts[1] > 12) {
+            parts[1] = '12';
+            this.value = parts.join('/');
+        }
+    });
 });
-
-
-
-
-
-
-function validateAndFormatDate(element) {
-	var date = element.val();
-
-	if (!isValidDate(date)) {
-		alert('Data inválida!');
-		element.focus();
-		return false;
-	}
-
-	element.val(formatDate(date));
-	return true;
-}
-
-function isValidDate(date) {
-	var datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
-
-	if (!datePattern.test(date)) {
-		return false;
-	}
-
-	var parts = date.split('/');
-	var day = parseInt(parts[0], 10);
-	var month = parseInt(parts[1], 10);
-	var year = parseInt(parts[2], 10);
-
-	var dateObj = new Date(year, month - 1, day);
-	return (dateObj.getFullYear() === year && dateObj.getMonth() === month - 1 && dateObj.getDate() === day);
-}
-
-function formatDate(date) {
-	var parts = date.split('/');
-	var day = parts[0].padStart(2, '0');
-	var month = parts[1].padStart(2, '0');
-	var year = parts[2];
-
-	return `${day}/${month}/${year}`;
-}
-
-$(document).ready(function() {
-	let clicks = 0;
-	let timeout;
-
-	$("#tabelaresultados").on("click", ".editar-btn", function() {
-		let linha = $(this).closest("tr");
-		linha.find("td[data-field]").each(function() {
-			let valor = $(this).text();
-			$(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
-		});
-		linha.find(".editar-btn").hide();
-		linha.find(".salvar-btn").show();
-	});
-
-	$("#tabelaresultados").on("click", ".salvar-btn", function() {
-		let linha = $(this).closest("tr");
-		let valid = true;
-
-		linha.find("td[data-field] input").each(function() {
-			let novoValor = $(this).val();
-			let dataField = $(this).parent().attr('data-field');
-			if (dataField === 'cpf') {
-				if (!validateAndFormatCPF($(this))) {
-					valid = false;
-					return false; // Saia do loop se o CPF for inválido
-				}
-			} else if (dataField === 'datanascimento' || dataField === 'dataaso') {
-				if (!validateAndFormatDate($(this))) {
-					valid = false;
-					return false; // Saia do loop se a data for inválida
-				}
-			}
-			$(this).parent().text(novoValor);
-		});
-
-		if (valid) {
-			linha.find(".salvar-btn").hide();
-			linha.find(".editar-btn").show();
-
-			let id = linha.attr('id').split('-')[1];
-			// salvarLinha(id); // Chame a função de salvamento se necessário
-		}
-	});
-
-	$("#tabelaresultados").on("click", "td[data-field]", function() {
-		clicks++;
-		if (clicks === 1) {
-			timeout = setTimeout(function() {
-				clicks = 0;
-			}, 300);
-		} else {
-			clearTimeout(timeout);
-			clicks = 0;
-			let valor = $(this).text();
-			let input = $('<input type="text" class="form-control input-edit" value="' + valor + '">');
-			$(this).html(input);
-			$(this).closest("tr").find(".editar-btn").hide();
-			$(this).closest("tr").find(".salvar-btn").show();
-
-			if ($(this).attr('data-field') === 'datanascimento' || $(this).attr('data-field') === 'dataaso') {
-				input.on('input', function() {
-					var datePattern = $(this).val().replace(/\D/g, '')
-						.replace(/(\d{2})(\d)/, '$1/$2')
-						.replace(/(\d{2})(\d)/, '$1/$2')
-						.replace(/(\d{4})\d+?$/, '$1');
-					$(this).val(datePattern);
-				});
-			}
-		}
-	});
-});
-
 
 
 function removerLinhaPorId(id, selector) {
