@@ -28,7 +28,7 @@ function listUsers() {
 				ind += `<td data-field="centrodecusto" type="text">${user.centrodecusto}</td>`;
 				ind += `<td data-field="funcao" type="text">${user.funcao}</td>`;
 				ind += `<td data-field="nome" type="text">${user.nome}</td>`;
-				ind += `<td data-field="datanascimento" type="date">${user.datanascimento}</td>`;
+				ind += `<td data-field="datanascimento" type="date" >${user.datanascimento}</td>`;
 				ind += `<td data-field="cpf" type="text" class="cpf-cell" id="cpf-validade">${user.cpf}</td>`;
 				ind += `<td data-field="rg" type="text">${user.rg}</td>`;
 				ind += `<td data-field="aso" type="text">${user.aso}</td>`;
@@ -561,6 +561,122 @@ $(document).ready(function() {
         this.value = formatCPF(this.value);
     });
 });
+
+
+
+
+
+
+function validateAndFormatDate(element) {
+    var date = element.val();
+
+    if (!isValidDate(date)) {
+        alert('Data inválida!');
+        element.focus();
+        return false;
+    }
+
+    element.val(formatDate(date));
+    return true;
+}
+
+function isValidDate(date) {
+    var datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+    if (!datePattern.test(date)) {
+        return false;
+    }
+
+    var parts = date.split('/');
+    var day = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10);
+    var year = parseInt(parts[2], 10);
+
+    var dateObj = new Date(year, month - 1, day);
+    return (dateObj.getFullYear() === year && dateObj.getMonth() === month - 1 && dateObj.getDate() === day);
+}
+
+function formatDate(date) {
+    var parts = date.split('/');
+    var day = parts[0].padStart(2, '0');
+    var month = parts[1].padStart(2, '0');
+    var year = parts[2];
+
+    return `${day}/${month}/${year}`;
+}
+
+$(document).ready(function() {
+    let clicks = 0;
+    let timeout;
+
+    $("#tabelaresultados").on("click", ".editar-btn", function() {
+        let linha = $(this).closest("tr");
+        linha.find("td[data-field]").each(function() {
+            let valor = $(this).text();
+            $(this).html('<input type="text" class="form-control input-edit" value="' + valor + '">');
+        });
+        linha.find(".editar-btn").hide();
+        linha.find(".salvar-btn").show();
+    });
+
+    $("#tabelaresultados").on("click", ".salvar-btn", function() {
+        let linha = $(this).closest("tr");
+        let valid = true;
+
+        linha.find("td[data-field] input").each(function() {
+            let novoValor = $(this).val();
+            let dataField = $(this).parent().attr('data-field');
+            if (dataField === 'cpf') {
+                if (!validateAndFormatCPF($(this))) {
+                    valid = false;
+                    return false; // Saia do loop se o CPF for inválido
+                }
+            } else if (dataField === 'datanascimento' || dataField === 'dataaso') {
+                if (!validateAndFormatDate($(this))) {
+                    valid = false;
+                    return false; // Saia do loop se a data for inválida
+                }
+            }
+            $(this).parent().text(novoValor);
+        });
+
+        if (valid) {
+            linha.find(".salvar-btn").hide();
+            linha.find(".editar-btn").show();
+
+            let id = linha.attr('id').split('-')[1];
+            // salvarLinha(id); // Chame a função de salvamento se necessário
+        }
+    });
+
+    $("#tabelaresultados").on("click", "td[data-field]", function() {
+        clicks++;
+        if (clicks === 1) {
+            timeout = setTimeout(function() {
+                clicks = 0;
+            }, 300);
+        } else {
+            clearTimeout(timeout);
+            clicks = 0;
+            let valor = $(this).text();
+            let input = $('<input type="text" class="form-control input-edit" value="' + valor + '">');
+            $(this).html(input);
+            $(this).closest("tr").find(".editar-btn").hide();
+            $(this).closest("tr").find(".salvar-btn").show();
+
+            if ($(this).attr('data-field') === 'datanascimento' || $(this).attr('data-field') === 'dataaso') {
+                input.on('input', function() {
+                    var datePattern = $(this).val().replace(/\D/g, '')
+                        .replace(/(\d{2})(\d)/, '$1/$2')
+                        .replace(/(\d{2})(\d)/, '$1/$2')
+                        .replace(/(\d{4})\d+?$/, '$1');
+                    $(this).val(datePattern);
+                });
+            }
+        }
+    });
+});
+
 
 
 function removerLinhaPorId(id, selector) {
