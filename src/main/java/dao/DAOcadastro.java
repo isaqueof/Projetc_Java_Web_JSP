@@ -128,6 +128,7 @@ public class DAOcadastro {
 		}
 		return retorno;
 	}
+	
 
 	public void deletarCadastro(String idUser) throws SQLException {
 		String sql = "DELETE FROM cadastro WHERE id = ?";

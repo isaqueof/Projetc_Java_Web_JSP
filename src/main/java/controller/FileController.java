@@ -53,5 +53,19 @@ public class FileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @GetMapping("/verificarPdf")
+    @ResponseBody
+    public ResponseEntity<Boolean> verificarPdf(@RequestParam("id") Long id) {
+        try {
+            // Monta o nome do arquivo com base no ID
+            String fileName = id + "_arquivo.pdf"; // Ajuste conforme o padrão do nome do arquivo
+            Path file = Paths.get(uploadDir).resolve(fileName);
+            boolean exists = Files.exists(file);
+            return ResponseEntity.status(HttpStatus.OK).body(exists);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+        }
+    }
 }
 

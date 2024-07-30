@@ -43,13 +43,15 @@ function listUsers() {
 				// Adiciona o campo de upload e o link para o PDF
 				ind += '<td>';
 				ind += `<input type="file" name="file" class="form-control" id="uploadPdf-${user.id}" accept=".pdf" style="display:none;" onchange="uploadPdf(${user.id})">`;
-				ind += `<button type="button" class="btn btn-sm btn-secondary" onclick="document.getElementById('uploadPdf-${user.id}').click()">Upload PDF</button>`;
+				ind += `<button type="button" class="btn btn-sm btn-secondary" id="viewPdfButton-${user.id}" onclick="document.getElementById('uploadPdf-${user.id}').click()">Upload PDF</button>`;
+
 				if (user.pdfPath) {
-					ind += `<a href="/uploads/${user.pdfPath}" class="btn btn-info btn-sm pdf-link" id="pdf-link-${user.id}" target="_blank">Visualizar PDF</a>`;
+					ind += `<a href="/uploads/${user.pdfPath}" class="btn btn-info btn-sm pdf-link verificar-btn" id="pdf-link-${user.id}" target="_blank" data-id="${user.id}">Visualizar PDF</a>`;
 				} else {
-					ind += `<a href="#" class="btn btn-info btn-sm pdf-link" id="pdf-link-${user.id}" target="_blank" style="display:none;">Visualizar PDF</a>`;
+					ind += `<a href="#" class="btn btn-info btn-sm pdf-link verificar-btn" id="pdf-link-${user.id}" target="_blank" style="display:none;" data-id="${user.id}">Visualizar PDF</a>`;
 				}
 				ind += '</td>';
+
 
 
 				// Adiciona o botão de Delete	
@@ -112,6 +114,36 @@ function listUsers() {
 }
 
 
+
+$(document).ready(function() {
+	// Adiciona um evento de clique para verificar PDFs
+	$('.verificar-btn').each(function() {
+		var id = $(this).data('id');
+		verificarPdf(id, $(this));
+	});
+
+	function verificarPdf(id, button) {
+		$.ajax({
+			url: '/ServeletCadastro',
+			method: 'GET',
+			data: { acao: 'verificarpdf', id: id },
+			success: function(response) {
+				if (response.trim() === 'PDF disponível') {
+					button.show(); // Mostra o botão se o PDF estiver disponível
+				} else {
+					button.hide(); // Oculta o botão se o PDF não estiver disponível
+				}
+			},
+			error: function() {
+				console.error('Erro ao verificar PDF');
+				button.hide(); // Oculta o botão em caso de erro
+			}
+		});
+	}
+});
+
+
+
 function validateAndFormatCPF(element) {
 	var cpf = element.text();
 	if (!isValidCPF(cpf)) {
@@ -140,7 +172,6 @@ document.querySelectorAll('.input-edit').forEach(function(input) {
 		adjustWidthToText(input);
 	});
 });
-
 
 
 function limparFormulario() {

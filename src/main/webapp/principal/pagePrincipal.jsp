@@ -11,7 +11,7 @@
 <link href="webjars/bootstrap/5.3.3/css/bootstrap.min.css"
 	rel="stylesheet" />
 
-<link rel="stylesheet" href="css/style_pricipal.css">
+
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet"
@@ -192,15 +192,7 @@
 
 
 
-	<script type="text/javascript">
-		const input = document.getElementById("nomeBusca");
-		input.addEventListener("keyup", function(event) {
-			if (event.keyCode === 13) {
-				event.preventDefault();
-				document.getElementById("bottonClick").click();
-			}
-		});
-	</script>
+	
 
 </body>
 </html>
