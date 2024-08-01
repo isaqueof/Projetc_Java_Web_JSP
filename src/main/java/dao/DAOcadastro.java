@@ -160,7 +160,7 @@ public class DAOcadastro {
 					modelCadastro.setRg(resultSet.getString("rg"));
 					modelCadastro.setAso(resultSet.getString("aso"));
 					modelCadastro.setDataaso(resultSet.getString("dataaso"));
-					modelCadastro.setFilePath(resultSet.getString("filePath"));
+					modelCadastro.setFilePath(resultSet.getString("filePath")); 
 				}
 			}
 		}

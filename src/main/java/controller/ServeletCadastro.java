@@ -121,20 +121,19 @@ public class ServeletCadastro extends HttpServlet {
 	        String uploadDir = getServletContext().getRealPath("/uploads/");
 	        Path uploadPath = Paths.get(uploadDir);
 	        
-	        
-
 	        if (!Files.exists(uploadPath)) {
 	            Files.createDirectories(uploadPath);
 	        }
 	        
+	        // Caminho do arquivo relativo
+	        String filePathRelative = System.currentTimeMillis() + "_" + fileName;
+	        Path filePath = uploadPath.resolve(filePathRelative);
 	        
-
-	        String filePath = Paths.get(uploadDir, System.currentTimeMillis() + "_" + fileName).toString();
-	       
 	        System.out.println("Diretório de upload absoluto: " + uploadDir);
+	        System.out.println("Caminho do arquivo: " + filePath);
 
 	        try (InputStream fileContent = filePart.getInputStream()) {
-	            Files.copy(fileContent, Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+	            Files.copy(fileContent, filePath, StandardCopyOption.REPLACE_EXISTING);
 	        } catch (IOException e) {
 	            LOGGER.log(Level.SEVERE, "Erro ao salvar o arquivo", e);
 	            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -145,11 +144,12 @@ public class ServeletCadastro extends HttpServlet {
 	        String id = request.getParameter("id");
 	        ModelCadastro modelCadastro = daoCadastro.buscarCadastroPorId(Long.parseLong(id));
 	        if (modelCadastro != null) {
-	            modelCadastro.setFilePath(filePath);
+	            // Salve apenas o nome do arquivo ou caminho relativo
+	            modelCadastro.setFilePath(filePathRelative);
 	            daoCadastro.gravarCadastro(modelCadastro);
 
 	            // Correção: Geração da URL acessível publicamente
-	            String fileUrl = request.getContextPath() + "/uploads/" + Paths.get(filePath).getFileName().toString();
+	            String fileUrl = request.getContextPath() + "/uploads/" + filePathRelative;
 	            response.getWriter().write(fileUrl);
 	        } else {
 	            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

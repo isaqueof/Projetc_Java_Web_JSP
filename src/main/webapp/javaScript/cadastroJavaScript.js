@@ -46,8 +46,8 @@ function listUsers() {
 				ind += `<button type="button" class="btn btn-sm btn-secondary" id="viewPdfButton-${user.id}" onclick="document.getElementById('uploadPdf-${user.id}').click()">Upload PDF</button>`;
 
 				let pdfLink = '';
-				if (user.pdfPath) {
-					pdfLink = `/uploads/${user.pdfPath}`;
+				if (user.filePath) {
+					pdfLink = `uploads/${user.filePath}`;
 				}
 
 				ind += `
@@ -55,12 +55,13 @@ function listUsers() {
 				       class="btn btn-info btn-sm pdf-link verificar-btn" 
 				       id="pdf-link-${user.id}" 
 				       target="_blank" 
-				       style="${user.pdfPath ? '' : 'display:none;'}" 
+				       style="${user.filePath ? '' : 'display:none;'}" 
 				       data-id="${user.id}">
 				       Visualizar PDF
 				    </a>`;
 
 				ind += '</td>';
+
 
 
 
@@ -124,6 +125,27 @@ function listUsers() {
 }
 
 
+function buscarCad() {
+	let urlAction = document.getElementById('formUser').action;
+	$.ajax({
+		method: "GET",
+		url: urlAction,
+		data: '&acao=buscarcadastroajax',
+		success: function(response) {
+			// Converter a resposta para um objeto JavaScript se necessário
+			let data = JSON.parse(response);
+
+			// Iterar sobre os dados e imprimir um campo específico, por exemplo, 'nome'
+			data.forEach(item => {
+				console.log('Nome: ' + item.filePath);
+			});
+		}
+	}).fail(function(xhr, status, errorThrown) {
+		alert('Erro ao buscar cadastro: ' + xhr.status + '  ' + status + ' ' + errorThrown);
+	});
+}
+
+buscarCad();
 
 
 
