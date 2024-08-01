@@ -70,7 +70,7 @@
 									<th scope="col">Cpf</th>
 									<th scope="col">Rg</th>
 									<th scope="col">Aso</th>
-									<th scope="col">Data Aso</th>
+									<th scope="col">Data Aso</th>									
 									<th scope="col">Editar</th>
 									<th scope="col">Arquivos</th>
 									<th scope="col">Deletar</th>

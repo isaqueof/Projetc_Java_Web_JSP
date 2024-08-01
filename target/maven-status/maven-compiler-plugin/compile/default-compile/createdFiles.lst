@@ -1,11 +1,13 @@
-controller\ServletLogin.class
 filter\FilterAutentic.class
 controller\ServletUsuarioController.class
 connection\testeCodigo.class
-dao\DAOcadastro.class
 dao\DAOLoginRepository.class
-model\ModelLogin.class
 controller\ServeletCadastro.class
 dao\DAOUsuaryRepository.class
-model\ModelCadastro.class
 connection\SingleConnectionBanco.class
+controller\FileController.class
+controller\ServletLogin.class
+controller\FileRepository.class
+dao\DAOcadastro.class
+model\ModelLogin.class
+model\ModelCadastro.class

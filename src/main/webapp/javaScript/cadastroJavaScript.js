@@ -1,6 +1,5 @@
 window.addEventListener('load', () => {
 	listUsers();
-
 })
 
 
@@ -34,6 +33,7 @@ function listUsers() {
 				ind += `<td data-field="aso" type="text">${user.aso}</td>`;
 				ind += `<td data-field="dataaso" type="date">${user.dataaso}</td>`;
 
+
 				// Adiciona os botões Editar e Salvar
 				ind += '<td>';
 				ind += `<button class="btn btn-sm btn-primary editar-btn edit-btn" type="button" onclick="editarLinha(${user.id})"><i class="fa-solid fa-pencil"></i></button>`;
@@ -45,11 +45,21 @@ function listUsers() {
 				ind += `<input type="file" name="file" class="form-control" id="uploadPdf-${user.id}" accept=".pdf" style="display:none;" onchange="uploadPdf(${user.id})">`;
 				ind += `<button type="button" class="btn btn-sm btn-secondary" id="viewPdfButton-${user.id}" onclick="document.getElementById('uploadPdf-${user.id}').click()">Upload PDF</button>`;
 
+				let pdfLink = '';
 				if (user.pdfPath) {
-					ind += `<a href="/uploads/${user.pdfPath}" class="btn btn-info btn-sm pdf-link verificar-btn" id="pdf-link-${user.id}" target="_blank" data-id="${user.id}">Visualizar PDF</a>`;
-				} else {
-					ind += `<a href="#" class="btn btn-info btn-sm pdf-link verificar-btn" id="pdf-link-${user.id}" target="_blank" style="display:none;" data-id="${user.id}">Visualizar PDF</a>`;
+					pdfLink = `/uploads/${user.pdfPath}`;
 				}
+
+				ind += `
+				    <a href="${pdfLink || '#'}" 
+				       class="btn btn-info btn-sm pdf-link verificar-btn" 
+				       id="pdf-link-${user.id}" 
+				       target="_blank" 
+				       style="${user.pdfPath ? '' : 'display:none;'}" 
+				       data-id="${user.id}">
+				       Visualizar PDF
+				    </a>`;
+
 				ind += '</td>';
 
 
@@ -105,7 +115,7 @@ function listUsers() {
 					{ title: 'Editar' },
 					{ title: 'Arquivos' },
 					{ title: 'Deletar' }
-				]
+				],
 			});
 		}
 	}).fail(function(xhr, status, errorThrown) {
@@ -115,50 +125,12 @@ function listUsers() {
 
 
 
-$(document).ready(function() {
-	// Adiciona um evento de clique para verificar PDFs
-	$('.verificar-btn').each(function() {
-		var id = $(this).data('id');
-		verificarPdf(id, $(this));
-	});
 
-	function verificarPdf(id, button) {
-		$.ajax({
-			url: '/ServeletCadastro',
-			method: 'GET',
-			data: { acao: 'verificarpdf', id: id },
-			success: function(response) {
-				if (response.trim() === 'PDF disponível') {
-					button.show(); // Mostra o botão se o PDF estiver disponível
-				} else {
-					button.hide(); // Oculta o botão se o PDF não estiver disponível
-				}
-			},
-			error: function() {
-				console.error('Erro ao verificar PDF');
-				button.hide(); // Oculta o botão em caso de erro
-			}
-		});
-	}
-});
+
+
 
 
 $(document).ready(function() {
-
-	function editarLinha(id) {
-		let tabela = $('#tabelaresultados').DataTable();
-		let linha = tabela.row(function(idx, data, node) {
-			return data[0] === id ? true : false;
-		});
-
-		linha.nodes().to$().find('td[data-field]').each(function() {
-			let celula = $(this);
-			let valor = celula.text();
-			celula.empty().append($('<input type="text" class="form-control input-edit" />').val(valor));
-		});
-
-		linha.nodes().to$().find('button[onclick^="editarLinha"]').attr('onclick', 'salvarLinha(' + id + ')');
-	}
 
 	let clicks = 0;
 	let timeout;
@@ -196,6 +168,7 @@ $(document).ready(function() {
 		});
 
 		if (valid) {
+
 			linha.find(".salvar-btn").hide();
 			linha.find(".editar-btn").show();
 			let id = linha.attr('id').split('-')[1];
@@ -330,46 +303,6 @@ $(document).ready(function() {
 		}
 	});
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 function validateAndFormatCPF(element) {
@@ -530,6 +463,7 @@ function salvarLinha(id) {
 }
 
 
+
 function uploadPdf(id) {
 	var fileInput = document.getElementById('uploadPdf-' + id);
 	if (!fileInput || !fileInput.files || !fileInput.files[0]) {
@@ -558,6 +492,7 @@ function uploadPdf(id) {
 				linkElement.href = response;
 				linkElement.style.display = 'inline-block';
 				linkElement.innerText = 'Visualizar PDF';
+
 			} else {
 				console.error('Elemento do link não encontrado.');
 			}
@@ -595,6 +530,7 @@ function criarDeleteComAjax(id) {
 		url: urlAction,
 		data: "id=" + id + '&acao=deletarajax',
 		success: function(response) {
+			response;
 			removerLinhaPorId(id, '#tabelaresultados');
 
 		}

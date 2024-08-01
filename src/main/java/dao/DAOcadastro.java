@@ -99,7 +99,6 @@ public class DAOcadastro {
 		return model;
 	}
 
-
 	public List<ModelCadastro> consultaUsuarioList() throws SQLException {
 		List<ModelCadastro> retorno = new ArrayList<>();
 
@@ -128,7 +127,6 @@ public class DAOcadastro {
 		}
 		return retorno;
 	}
-	
 
 	public void deletarCadastro(String idUser) throws SQLException {
 		String sql = "DELETE FROM cadastro WHERE id = ?";
@@ -162,8 +160,7 @@ public class DAOcadastro {
 					modelCadastro.setRg(resultSet.getString("rg"));
 					modelCadastro.setAso(resultSet.getString("aso"));
 					modelCadastro.setDataaso(resultSet.getString("dataaso"));
-					modelCadastro.setFilePath(resultSet.getString("filePath")); // Certifique-se de que o nome da coluna
-																				// está correto
+					modelCadastro.setFilePath(resultSet.getString("filePath"));
 				}
 			}
 		}
