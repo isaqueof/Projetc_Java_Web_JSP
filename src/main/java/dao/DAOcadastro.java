@@ -166,4 +166,6 @@ public class DAOcadastro {
 		}
 		return modelCadastro;
 	}
+
+
 }

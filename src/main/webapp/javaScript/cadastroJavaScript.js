@@ -125,27 +125,106 @@ function listUsers() {
 }
 
 
-function buscarCad() {
-	let urlAction = document.getElementById('formUser').action;
-	$.ajax({
-		method: "GET",
-		url: urlAction,
-		data: '&acao=buscarcadastroajax',
-		success: function(response) {
-			// Converter a resposta para um objeto JavaScript se necessário
-			let data = JSON.parse(response);
 
-			// Iterar sobre os dados e imprimir um campo específico, por exemplo, 'nome'
-			data.forEach(item => {
-				console.log('Nome: ' + item.filePath);
+function gerarRelatorioASO() {
+	$.ajax({
+		url: 'ServeletCadastro?acao=buscarCadastroAjax',
+		method: 'GET',
+		dataType: 'json',
+		success: function(data) {
+			// Prepare os dados para o PDF
+			const documentos = data.map(item => {
+				return [
+					{ text: item.nome, style: 'tableContent' },
+					{ text: item.cpf, style: 'tableContent' },
+					{ text: item.datanascimento, style: 'tableContent' },
+					{ text: item.funcao, style: 'tableContent' },
+					{ text: item.centrodecusto, style: 'tableContent' },
+					{ text: item.dataaso, style: 'tableContent' },
+					{ text: calcularProximoASO(item.dataaso), style: 'tableContent' }
+				];
 			});
+
+			// Defina o conteúdo do PDF
+			const docDefinition = {
+				pageSize: 'A4',
+				pageOrientation: 'landscape',
+				pageMargins: [20, 20, 20, 20], // Margens da página: [esquerda, superior, direita, inferior]
+				content: [
+					{
+						text: 'Relatório de ASO',
+						style: 'header'
+					},
+					{
+						table: {
+							headerRows: 1,
+							widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'], // Ajuste as larguras das colunas conforme necessário
+							body: [
+								[
+									{ text: 'Nome', style: 'tableHeader' },
+									{ text: 'CPF', style: 'tableHeader' },
+									{ text: 'Data de Nascimento', style: 'tableHeader' },
+									{ text: 'Função', style: 'tableHeader' },
+									{ text: 'Centro de Custo', style: 'tableHeader' },
+									{ text: 'Data do ASO', style: 'tableHeader' },
+									{ text: 'Próximo ASO', style: 'tableHeader' }
+								],
+								...documentos // Adiciona os dados ao corpo da tabela
+							]
+						},
+						layout: 'lightHorizontalLines',
+						margin: [0, 10, 0, 10] // Margem acima e abaixo da tabela
+					}
+				],
+				styles: {
+					header: {
+						fontSize: 15,
+						bold: true,
+						margin: [0, 0, 0, 10]
+					},
+					tableHeader: {
+						fontSize: 12, // Tamanho da fonte dos títulos das colunas
+						bold: true,
+						fillColor: '#f0f0f0',
+						margin: [5, 5, 5, 5], // Margem acima e abaixo
+						noWrap: true
+					},
+					tableContent: {
+						fontSize: 10, // Tamanho da fonte do conteúdo das células
+						margin: [5, 2, 5, 2], // Margem acima e abaixo das células
+						noWrap: true
+					}
+				}
+			};
+
+			// Gere e abra o PDF no navegador
+			pdfMake.createPdf(docDefinition).open();
+		},
+		error: function(xhr, status, error) {
+			console.error('Erro ao buscar dados:', error);
 		}
-	}).fail(function(xhr, status, errorThrown) {
-		alert('Erro ao buscar cadastro: ' + xhr.status + '  ' + status + ' ' + errorThrown);
 	});
 }
 
-buscarCad();
+
+
+
+function calcularProximoASO(dataASO) {
+	// Implementar a lógica para calcular a data do próximo ASO
+	const partesData = dataASO.split("/");
+	const dia = parseInt(partesData[0]);
+	const mes = parseInt(partesData[1]) - 1; // Mês no objeto Date é 0-11
+	const ano = parseInt(partesData[2]);
+
+	const calendar = new Date(ano, mes, dia);
+	calendar.setFullYear(calendar.getFullYear() + 1); // Adicionar um ano
+
+	const diaProximo = calendar.getDate();
+	const mesProximo = calendar.getMonth() + 1;
+	const anoProximo = calendar.getFullYear();
+
+	return `${String(diaProximo).padStart(2, '0')}/${String(mesProximo).padStart(2, '0')}/${anoProximo}`;
+}
 
 
 

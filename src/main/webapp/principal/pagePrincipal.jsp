@@ -42,7 +42,8 @@
 				<li class="nav-item" data-bs-toggle="modal"
 					data-bs-target="#exampleModal"><a class="nav-link active"
 					aria-current="page" href="#">Cadastro</a></li>
-				<li class="nav-item"><a class="nav-link" href="#">Load XML</a></li>
+				<li class="nav-item"><a class="nav-link" href="#"
+					onclick="gerarRelatorioASO();" id="btnGerarRelatorio">Gerar Relatório PDF</a></li>
 			</ul>
 
 		</div>
@@ -60,6 +61,7 @@
 						<table id="tabelaresultados"
 							class="display table table-striped table-sm align-middle table-bordered table-dark table-striped table-hover"
 							style="width: 100%;">
+							
 							<thead>
 								<tr>
 									<th scope="col" style="display: none;">Id</th>
@@ -70,7 +72,7 @@
 									<th scope="col">Cpf</th>
 									<th scope="col">Rg</th>
 									<th scope="col">Aso</th>
-									<th scope="col">Data Aso</th>									
+									<th scope="col">Data Aso</th>
 									<th scope="col">Editar</th>
 									<th scope="col">Arquivos</th>
 									<th scope="col">Deletar</th>
@@ -149,6 +151,25 @@
 		</div>
 	</div>
 
+	<h1>Relatório de ASO</h1>
+	<table id="relatorioASOTable">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Nome</th>
+				<th>CPF</th>
+				<th>Data de Nascimento</th>
+				<th>Função</th>
+				<th>Centro de Custo</th>
+				<th>Data do ASO</th>
+				<th>Próximo ASO</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- Dados serão inseridos aqui -->
+		</tbody>
+	</table>
+	<script src="relatorioASO.js"></script>
 
 
 
@@ -192,7 +213,7 @@
 
 
 
-	
+
 
 </body>
 </html>
