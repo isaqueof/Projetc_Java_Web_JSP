@@ -10,7 +10,8 @@ body {
 	flex-direction: column;
 	align-items: center;
 	justify-content: flex-start; /* Alinha o conteúdo no topo */
-	background-image: radial-gradient(circle at 46.72% 12.54%, #ffffff 0, #ffffff 25%, #ffffff 50%, #f4f8f7 75%, #e9f2ef 100%);
+	background-image: radial-gradient(circle at 46.72% 12.54%, #ffffff 0, #ffffff 25%, #ffffff
+		50%, #f4f8f7 75%, #e9f2ef 100%);
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -35,11 +36,15 @@ body::-webkit-scrollbar-thumb:hover {
 .bt {
 	border: none;
 	color: white;
-	background: linear-gradient(155deg, #82ffe3 0, #6effe2 12.5%, #5bfdde 25%, #4cead7 37.5%, #42d4cb 50%, #3dbfbe 62.5%, #3bacb1 75%, #3b9ca5 87.5%, #3c8e9a 100%);
+	background: linear-gradient(155deg, #82ffe3 0, #6effe2 12.5%, #5bfdde 25%, #4cead7
+		37.5%, #42d4cb 50%, #3dbfbe 62.5%, #3bacb1 75%, #3b9ca5 87.5%, #3c8e9a
+		100%);
 }
 
 .bt:hover {
-	background: linear-gradient(155deg, #ff8e2a 0, #ff7d34 12.5%, #fb6a3c 25%, #ea5640 37.5%, #d44242 50%, #bd2f42 62.5%, #a71f42 75%, #941142 87.5%, #840542 100%);
+	background: linear-gradient(155deg, #ff8e2a 0, #ff7d34 12.5%, #fb6a3c 25%, #ea5640
+		37.5%, #d44242 50%, #bd2f42 62.5%, #a71f42 75%, #941142 87.5%, #840542
+		100%);
 }
 
 .divFomulario {
@@ -58,7 +63,6 @@ body::-webkit-scrollbar-thumb:hover {
 	justify-content: start;
 	padding: 40px;
 	width: 100%;
-	
 }
 
 .logout {
@@ -70,16 +74,17 @@ body::-webkit-scrollbar-thumb:hover {
 	flex-direction: column;
 	align-items: center;
 	position: fixed;
-            top: 100px;
-            left: 0;
-            width: 100%;
-            z-index: 1000; /* Garante que o menu fique acima de outros elementos */
+	top: 100px;
+	left: 0;
+	width: 100%;
+	z-index: 1000; /* Garante que o menu fique acima de outros elementos */
 }
 
 /* Defina uma altura mínima para o contêiner da tabela */
 .container {
-    min-height: 100vh; /* Define a altura mínima do contêiner para ocupar a altura total da viewport */
-    box-sizing: border-box; /* Inclui padding e bordas na altura total */
+	min-height: 100vh;
+	/* Define a altura mínima do contêiner para ocupar a altura total da viewport */
+	box-sizing: border-box; /* Inclui padding e bordas na altura total */
 }
 
 .input-group {
@@ -100,7 +105,8 @@ body::-webkit-scrollbar-thumb:hover {
 
 .table {
 	width: 100%;
-    table-layout: fixed; /* Garante que as colunas não ultrapassem o contêiner */
+	table-layout: fixed;
+	/* Garante que as colunas não ultrapassem o contêiner */
 	padding: 10px;
 	border-radius: 10px;
 	overflow: hidden;
@@ -163,50 +169,64 @@ body::-webkit-scrollbar-thumb:hover {
 	align-items: center;
 }
 
-
-
 #tabelaresultados {
-    width: 100%;
-    max-width: 800px; /* Ajuste conforme necessário */
-    border-radius: 5px;
-    table-layout: auto;
-    overflow-x: auto; /* Habilita rolagem horizontal se necessário */
+	width: 100%;
+	max-width: 800px; /* Ajuste conforme necessário */
+	border-radius: 5px;
+	table-layout: auto;
+	overflow-x: auto; /* Habilita rolagem horizontal se necessário */
 }
 
 .table-container {
 	display: flex;
 	flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding-top: 20px; /* Ajuste o padding conforme necessário */
+	align-items: center;
+	width: 100%;
+	padding-top: 20px; /* Ajuste o padding conforme necessário */
 }
 
 .dataTables_wrapper {
-    width: 100%;
-    overflow: hidden;
+	width: 100%;
+	overflow: hidden;
 }
 
 #tabelaresultados th, #tabelaresultados td {
-    white-space: nowrap; /* Impede a quebra de linha dentro das células */
-    overflow: hidden; /* Oculta o excesso de conteúdo que não cabe na célula */
-    text-overflow: ellipsis; /* Adiciona reticências se o texto for muito longo */
-    padding: 5px; /* Ajusta o padding das células */
-    vertical-align: top; /* Alinha o texto no topo das células */
+	white-space: nowrap; /* Impede a quebra de linha dentro das células */
+	overflow: hidden;
+	/* Oculta o excesso de conteúdo que não cabe na célula */
+	text-overflow: ellipsis;
+	/* Adiciona reticências se o texto for muito longo */
+	padding: 5px; /* Ajusta o padding das células */
+	vertical-align: top; /* Alinha o texto no topo das células */
 }
 
 .input-edit {
-    height: auto;
-    font-size: 14px;
-    padding: 4px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-    width: auto; /* Ajusta a largura conforme o texto */
+	height: auto;
+	font-size: 14px;
+	padding: 4px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-sizing: border-box;
+	width: auto; /* Ajusta a largura conforme o texto */
 }
 
 /* Adicione consultas de mídia para responsividade, se necessário */
-@media (max-width: 768px) {
+@media ( max-width : 768px) {
 	.form1, .input-group {
 		flex-direction: column;
 	}
+}
+
+/* CSS para o pop-up de notificação */
+.notification-popup {
+	position: fixed;
+	top: 20%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #f8d7da;
+	color: #721c24;
+	border: 1px solid #f5c6cb;
+	padding: 20px;
+	border-radius: 5px;
+	z-index: 1000;
 }

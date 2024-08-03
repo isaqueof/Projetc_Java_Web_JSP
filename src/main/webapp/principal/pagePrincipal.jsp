@@ -43,7 +43,8 @@
 					data-bs-target="#exampleModal"><a class="nav-link active"
 					aria-current="page" href="#">Cadastro</a></li>
 				<li class="nav-item"><a class="nav-link" href="#"
-					onclick="gerarRelatorioASO();" id="btnGerarRelatorio">Gerar Relatório PDF</a></li>
+					onclick="gerarRelatorioASO();" id="btnGerarRelatorio">Gerar
+						Relatório PDF</a></li>
 			</ul>
 
 		</div>
@@ -61,7 +62,7 @@
 						<table id="tabelaresultados"
 							class="display table table-striped table-sm align-middle table-bordered table-dark table-striped table-hover"
 							style="width: 100%;">
-							
+
 							<thead>
 								<tr>
 									<th scope="col" style="display: none;">Id</th>
@@ -86,6 +87,14 @@
 				</div>
 			</div>
 		</form>
+	</div>
+
+
+	<!-- HTML para o pop-up de notificação -->
+	<div id="notificationPopup" class="notification-popup"
+		style="display: none;">
+		<p id="notificationMessage"></p>
+		<button id="closePopup">Fechar</button>
 	</div>
 
 
@@ -144,6 +153,8 @@
 								data-bs-dismiss="modal">Fechar</button>
 							<button type="button" class="btn btn-primary" id="salvarBtn"
 								onclick="gravarCadastro()">Salvar</button>
+
+
 						</div>
 					</form>
 				</div>

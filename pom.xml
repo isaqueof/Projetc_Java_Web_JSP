@@ -138,6 +138,13 @@
 			<version>5.5.13.4</version>
 		</dependency>
 
+		<!-- Outras dependências -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.10.1</version> <!-- Use a versão mais recente disponível -->
+		</dependency>
+
 
 	</dependencies>
 

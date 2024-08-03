@@ -126,15 +126,43 @@ function listUsers() {
 
 
 
+function precisaFazerASO(dataASO) {
+	const partesData = dataASO.split("/");
+	const dia = parseInt(partesData[0]);
+	const mes = parseInt(partesData[1]);
+	const ano = parseInt(partesData[2]);
+
+	const asoDate = new Date(ano, mes, dia);
+	const dataVencimento = new Date(asoDate);
+	dataVencimento.setFullYear(asoDate.getFullYear() + 1);
+
+	const dataMesesAntes = new Date(dataVencimento);
+	dataMesesAntes.setMonth(dataMesesAntes.getMonth() - 1);
+
+	const hoje = new Date();
+
+	// Verifica se a data atual está entre 11 meses após a data do ASO e a data de vencimento
+	const resultado = hoje >= dataMesesAntes && hoje < dataVencimento;
+	const resultado2 = hoje >= dataMesesAntes && hoje >= dataVencimento;
+	return resultado || resultado2;
+}
+
 function gerarRelatorioASO() {
 	$.ajax({
 		url: 'ServeletCadastro?acao=buscarCadastroAjax',
 		method: 'GET',
 		dataType: 'json',
 		success: function(data) {
-			// Prepare os dados para o PDF
-			const documentos = data.map(item => {
-				return [
+			console.log('Dados recebidos:', data); // Verifique os dados retornados
+
+			// Filtrar os dados para incluir apenas aqueles que precisam fazer o ASO (vencimento em até 1 mês)
+			const documentos = data
+				.filter(item => {
+					const precisa = item.dataaso && precisaFazerASO(item.dataaso);
+					console.log(`Item: ${item.nome}, Data ASO: ${item.dataaso}, Precisa Fazer ASO: ${precisa}`);
+					return precisa;
+				}) // Filtra os dados
+				.map(item => [
 					{ text: item.nome, style: 'tableContent' },
 					{ text: item.cpf, style: 'tableContent' },
 					{ text: item.datanascimento, style: 'tableContent' },
@@ -142,14 +170,21 @@ function gerarRelatorioASO() {
 					{ text: item.centrodecusto, style: 'tableContent' },
 					{ text: item.dataaso, style: 'tableContent' },
 					{ text: calcularProximoASO(item.dataaso), style: 'tableContent' }
-				];
-			});
+				]);
+
+			console.log('Documentos filtrados:', documentos); // Verifique os dados filtrados
+
+			// Verificar se há dados para gerar o relatório
+			if (documentos.length === 0) {
+				alert('Nenhum dado para exibir no relatório.');
+				return;
+			}
 
 			// Defina o conteúdo do PDF
 			const docDefinition = {
 				pageSize: 'A4',
 				pageOrientation: 'landscape',
-				pageMargins: [20, 20, 20, 20], // Margens da página: [esquerda, superior, direita, inferior]
+				pageMargins: [20, 20, 20, 20], // Margens da página
 				content: [
 					{
 						text: 'Relatório de ASO',
@@ -183,16 +218,14 @@ function gerarRelatorioASO() {
 						margin: [0, 0, 0, 10]
 					},
 					tableHeader: {
-						fontSize: 12, // Tamanho da fonte dos títulos das colunas
+						fontSize: 10, // Tamanho da fonte dos títulos das colunas
 						bold: true,
 						fillColor: '#f0f0f0',
-						margin: [5, 5, 5, 5], // Margem acima e abaixo
-						noWrap: true
+						margin: [5, 5, 5, 5] // Margem acima e abaixo
 					},
 					tableContent: {
-						fontSize: 10, // Tamanho da fonte do conteúdo das células
-						margin: [5, 2, 5, 2], // Margem acima e abaixo das células
-						noWrap: true
+						fontSize: 8, // Tamanho da fonte do conteúdo das células
+						margin: [5, 2, 5, 2] // Margem acima e abaixo das células
 					}
 				}
 			};
@@ -206,18 +239,14 @@ function gerarRelatorioASO() {
 	});
 }
 
-
-
-
 function calcularProximoASO(dataASO) {
-	// Implementar a lógica para calcular a data do próximo ASO
 	const partesData = dataASO.split("/");
 	const dia = parseInt(partesData[0]);
 	const mes = parseInt(partesData[1]) - 1; // Mês no objeto Date é 0-11
 	const ano = parseInt(partesData[2]);
 
 	const calendar = new Date(ano, mes, dia);
-	calendar.setFullYear(calendar.getFullYear() + 1); // Adicionar um ano
+	calendar.setFullYear(calendar.getFullYear()); // Adicionar um ano
 
 	const diaProximo = calendar.getDate();
 	const mesProximo = calendar.getMonth() + 1;
@@ -225,6 +254,7 @@ function calcularProximoASO(dataASO) {
 
 	return `${String(diaProximo).padStart(2, '0')}/${String(mesProximo).padStart(2, '0')}/${anoProximo}`;
 }
+
 
 
 
