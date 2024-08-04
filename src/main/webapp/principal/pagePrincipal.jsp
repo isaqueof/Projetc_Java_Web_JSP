@@ -10,7 +10,8 @@
 <!-- Bootstrap CSS -->
 <link href="webjars/bootstrap/5.3.3/css/bootstrap.min.css"
 	rel="stylesheet" />
-
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
@@ -90,17 +91,10 @@
 	</div>
 
 
-	<!-- HTML para o pop-up de notificação -->
-	<div id="notificationPopup" class="notification-popup"
-		style="display: none;">
-		<p id="notificationMessage"></p>
-		<button id="closePopup">Fechar</button>
-	</div>
-
 
 	<!-- Modal -->
 	<div class="modal fade" id="exampleModal" tabindex="-1"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -162,33 +156,13 @@
 		</div>
 	</div>
 
-	<h1>Relatório de ASO</h1>
-	<table id="relatorioASOTable">
-		<thead>
-			<tr>
-				<th>ID</th>
-				<th>Nome</th>
-				<th>CPF</th>
-				<th>Data de Nascimento</th>
-				<th>Função</th>
-				<th>Centro de Custo</th>
-				<th>Data do ASO</th>
-				<th>Próximo ASO</th>
-			</tr>
-		</thead>
-		<tbody>
-			<!-- Dados serão inseridos aqui -->
-		</tbody>
-	</table>
-	<script src="relatorioASO.js"></script>
-
-
-
-
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="webjars/jquery/3.7.1/jquery.min.js"></script>
 	<script
 		src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 	<!-- JavaScript (Table) -->
 	<script type="text/javascript" src="javaScript/cadastroJavaScript.js"></script>
 	<script defer

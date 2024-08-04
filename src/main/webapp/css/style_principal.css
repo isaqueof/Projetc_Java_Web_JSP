@@ -77,14 +77,12 @@ body::-webkit-scrollbar-thumb:hover {
 	top: 100px;
 	left: 0;
 	width: 100%;
-	z-index: 1000; /* Garante que o menu fique acima de outros elementos */
+	z-index: 1000;
 }
 
-/* Defina uma altura mínima para o contêiner da tabela */
 .container {
 	min-height: 100vh;
-	/* Define a altura mínima do contêiner para ocupar a altura total da viewport */
-	box-sizing: border-box; /* Inclui padding e bordas na altura total */
+	box-sizing: border-box;
 }
 
 .input-group {
@@ -201,32 +199,21 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .input-edit {
-	height: auto;
+	height: 100%;
 	font-size: 14px;
 	padding: 4px;
 	border: 1px solid #ddd;
 	border-radius: 4px;
 	box-sizing: border-box;
-	width: auto; /* Ajusta a largura conforme o texto */
+	width: 100%;
+	/* Adicione consultas de mídia para responsividade, se necessário */
+	@media ( max-width : 768px) { .form1 , .input-group {
+	flex-direction: column;
 }
 
-/* Adicione consultas de mídia para responsividade, se necessário */
-@media ( max-width : 768px) {
-	.form1, .input-group {
-		flex-direction: column;
-	}
+}
 }
 
-/* CSS para o pop-up de notificação */
-.notification-popup {
-	position: fixed;
-	top: 20%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: #f8d7da;
-	color: #721c24;
-	border: 1px solid #f5c6cb;
-	padding: 20px;
-	border-radius: 5px;
-	z-index: 1000;
+table.dataTable tbody td {
+	border: none;
 }

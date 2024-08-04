@@ -59,7 +59,7 @@ public class DAOcadastro {
 			preparedStatement.setString(6, objeto.getRg());
 			preparedStatement.setString(7, objeto.getAso());
 			preparedStatement.setString(8, objeto.getDataaso());
-			preparedStatement.setString(9, objeto.getFilePath()); // Adiciona o caminho do arquivo
+			preparedStatement.setString(9, objeto.getFilePath()); 
 			preparedStatement.setLong(10, objeto.getId());
 
 			int rowsUpdated = preparedStatement.executeUpdate();

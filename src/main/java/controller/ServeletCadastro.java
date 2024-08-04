@@ -247,6 +247,7 @@ public class ServeletCadastro extends HttpServlet {
 		String aso = request.getParameter("aso");
 		String dataaso = request.getParameter("dataaso");
 
+		// Verifica se todos os parâmetros são obrigatórios
 		if (centrodecusto == null || funcao == null || nome == null || datanascimento == null || cpf == null
 				|| rg == null || aso == null || dataaso == null) {
 			throw new IllegalArgumentException("Todos os parâmetros são obrigatórios");
@@ -262,6 +263,15 @@ public class ServeletCadastro extends HttpServlet {
 		modelCadastro.setRg(rg);
 		modelCadastro.setAso(aso);
 		modelCadastro.setDataaso(dataaso);
+
+		// Verifica se o registro existe no banco de dados
+		if (modelCadastro.getId() != null) {
+			ModelCadastro existingCadastro = daoCadastro.buscarCadastroPorId(modelCadastro.getId());
+			if (existingCadastro != null) {
+				// Mantém o caminho do arquivo PDF atual se não for enviado um novo arquivo
+				modelCadastro.setFilePath(existingCadastro.getFilePath());
+			}
+		}
 
 		daoCadastro.gravarCadastro(modelCadastro);
 		response.getWriter().write("Atualizado com sucesso!");

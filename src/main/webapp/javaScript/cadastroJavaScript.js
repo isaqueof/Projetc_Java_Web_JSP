@@ -30,7 +30,7 @@ function listUsers() {
 				ind += `<td data-field="datanascimento" type="date" >${user.datanascimento}</td>`;
 				ind += `<td data-field="cpf" type="text" class="cpf-cell" id="cpf-validade">${user.cpf}</td>`;
 				ind += `<td data-field="rg" type="text">${user.rg}</td>`;
-				ind += `<td data-field="aso" type="text">${user.aso}</td>`;
+				ind += `<td data-field="aso" type="date">${user.aso}</td>`;
 				ind += `<td data-field="dataaso" type="date">${user.dataaso}</td>`;
 
 
@@ -85,6 +85,9 @@ function listUsers() {
 				"lengthMenu": [10, 25, 50, 100], // Opções de itens por página
 				"pageLength": 10, // Valor padrão de itens por página
 				"dom": '<"top"B> <"top"f> <"top"l>rt<"bottom"ip><"clear">',
+				buttons: [
+
+				],
 				scrollX: false,
 				autoWidth: false,
 				responsive: false,
@@ -257,10 +260,6 @@ function calcularProximoASO(dataASO) {
 
 
 
-
-
-
-
 $(document).ready(function() {
 
 	let clicks = 0;
@@ -277,6 +276,7 @@ $(document).ready(function() {
 	});
 
 	$("#tabelaresultados").on("click", ".salvar-btn", function() {
+
 		let linha = $(this).closest("tr");
 		let cpfCell = linha.find("td[data-field='cpf'] input");
 		if (!validateAndFormatCPF(cpfCell)) {
@@ -303,7 +303,7 @@ $(document).ready(function() {
 			linha.find(".salvar-btn").hide();
 			linha.find(".editar-btn").show();
 			let id = linha.attr('id').split('-')[1];
-			// salvarLinha(id);
+			id.split('') + '-' + id.split;
 		}
 	});
 
@@ -455,7 +455,25 @@ document.getElementById('cpf').addEventListener('input', function(e) {
 		.replace(/(\d{3})(\d)/, '$1-$2') // Adiciona traço após o nono dígito
 		.replace(/(-\d{2})\d+?$/, '$1'); // Impede entrada de mais de 11 dígitos
 	e.target.value = cpfPattern;
-})
+});
+
+function formatDate(e) {
+    var value = e.target.value;
+    var datePattern = value.replace(/\D/g, '') // Remove qualquer coisa que não seja número
+        .replace(/(\d{2})(\d)/, '$1/$2') // Adiciona barra após o segundo dígito
+        .replace(/(\d{2})\/(\d{2})(\d)/, '$1/$2/$3') // Adiciona barra após o quarto dígito
+        .slice(0, 10); // Limita o tamanho total para 10 caracteres (DD/MM/YYYY)
+    e.target.value = datePattern;
+
+}
+
+// Adiciona o evento de input para os campos de data
+document.getElementById('datanascimento').addEventListener('input', formatDate);
+document.getElementById('dataaso').addEventListener('input', formatDate);
+
+
+
+
 
 // Adiciona um evento de input ao seu campo de entrada para ajustar a largura dinamicamente
 document.querySelectorAll('.input-edit').forEach(function(input) {
@@ -475,6 +493,7 @@ function limparFormulario() {
 	$('#rg').val('');
 	$('#aso').val('');
 	$('#dataaso').val('');
+	
 	// Adicione outros campos conforme necessário
 }
 
